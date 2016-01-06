@@ -59,6 +59,33 @@ class Vec2f
     
 }
 
+Vec3f turnAround()
+{
+  float apple = turn(PI);
+  if (apple < PI)
+  {
+    Move(-1.5);
+    float kiwi = turn(PI);
+    if(kiwi < PI)
+    {
+    turn(-kiwi);
+    Move(-5);
+    float peach = turn(PI);
+    Move(-5);
+    turn(-apple);
+    }
+    else
+    {
+      Move(-1.5);
+      turn(-(apple));
+    }
+  }
+}
+
+Vec3f attempt(Vec3f moveToAttempt)
+{
+  float anAngle = atan(moveToAttempt.y/moveToAttempt.x);
+}
 
 
 //Rabbot, i'm gonna leave how you want to call this function to you, but here is a function that asks for scan for fire and then figures out how much the robot needs to turn to
@@ -81,7 +108,6 @@ if (searchForFire()) {
     float Sensor = fireSensor[i];
   }
  }
- //HERE IS WHERE WE ROTATE THE ROBOT TO THE FLAME. NEED TO FIGURE OUT IF WE ARE DOING THIS WITH TWO MICE, ULTRASONICS, OR PRE-DETERMINED ROTATION VALUES
  Turn (-Sensor)
 }
 sprayAndPray()

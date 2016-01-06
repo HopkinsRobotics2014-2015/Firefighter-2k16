@@ -193,12 +193,6 @@ void mouse_init()
   delayMicroseconds(100);
 }
 
-void setup()
-{
-  Serial.begin(9600);
-  mouse_init();
-}
-
 /*
  * get a reading from the mouse and report it back to the
  * host via the serial line.

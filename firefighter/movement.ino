@@ -3,7 +3,7 @@ float Speed;
 
 
 //Returns the distance moved
-float Move(float dist, bool backwards = false) {
+float Move(float dist) {
   if (backwards) {
     pinMode(motorPin, OUTPUT);
     analogWrite(motorPin, 119);
@@ -20,9 +20,7 @@ float Move(float dist, bool backwards = false) {
 
 
 //Returns the number of radians turned
-//WHY DOES IT HAVE TO RETURN THE RADIANS TURNED? IT IS TOLD HOW MANY RADIANS IT SHOULD TURN.
 //angle is in radians, since radians make arc length easier
-//DO WE WANT THESE TO HAVE SET VALUES AS SHOWN BELOW OR DO WE WANT TO USE MICE TO DETECT WHEN WE TURN 90 DEGREES EXACTLY
 float Turn(float angle) {
   float Time;
   if (angle > 0) {
@@ -48,6 +46,5 @@ float Turn(float angle) {
 
 //Follows wall until the front sensor can't see the wall anymore
 //returns the distance traveled
-//ARE WE GOING TO RELY ON A DOUBLE MOUSE CONFIG OR ULTRASONICS TO MOVE?
 float WallFollow(int wallSide) {
 }
