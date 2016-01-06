@@ -166,14 +166,7 @@ void fireTime() {
     //HERE IS WHERE WE ROTATE THE ROBOT TO THE FLAME. NEED TO FIGURE OUT IF WE ARE DOING THIS WITH TWO MICE, ULTRASONICS, OR PRE-DETERMINED ROTATION VALUES
     Turn (-Sensor);
   }
-<<<<<<< HEAD
- }
- Turn (-Sensor)
-}
-sprayAndPray()
-=======
   sprayAndPray();
->>>>>>> origin/master
 }
 
 //This function has the robot slowly approach the flame while blowing the fan.
