@@ -2,19 +2,20 @@
 
 //Handles the actual navigation, not including position checking
 
-class Vec2f
+class Vec3f
 {
   private:
-    float x, y;
+    float x, y, angle;
   public:
-    Vec2f(float _x, float _y){
+    Vec3f(float _x = 0, float _y = 0, float _angle = 0){
       x = _x;
       y = _y;
+      angle = _angle;
     }
     
     //Gets a copy of the vector
-    Vec2f * get(){
-      Vec2f * ret = new Vec2f(x,y);
+    Vec3f * get(){
+      Vec3f * ret = new Vec3f(x,y);
       return ret;
     }
     
@@ -24,26 +25,34 @@ class Vec2f
     float getY(){
       return y;
     }
+    float getAngle(){
+      return angle;
+    }
     void setX(float _x){
       x = _x;
     }
     void setY(float _y){
       y = _y;
     }
+    void setAngle(float _angle){
+      angle = _angle;
+    }
     
     //Adds v to the current vector
-    void add(Vec2f * v){
+    void add(Vec3f * v){
       x += v->getX();
       y += v->getY();
+      angle += v->getAngle();
     }
     //Sets this = this - v
-    void subtract(Vec2f * v){
+    void subtract(Vec3f * v){
       x -= v->getX();
       y -= v->getY();
+      angle -= v->getAngle();
     }
     
     //Returns the dot product
-    float dot(Vec2f * v){
+    float dot(Vec3f * v){
       return x * v->getX() + y * v->getY();
     }
     
@@ -57,8 +66,10 @@ class Vec2f
       return sqrt(magnitudeSquared());
     }
     
-    void operator=(Vec2f * v){
-      
+    void operator=(Vec3f * v){
+      x = v->getX();
+      y = v->getY();
+      angle = v->getAngle();
     }
     
 };
@@ -67,35 +78,36 @@ class Vec2f
 class Line
 {
   private:
-    Vec2f * start, end;
+    Vec3f * start;
+    Vec3f * end;
   public:
-    Line(Vec2f _start, Vec2f _end){
-      start = new Vec2f(0,0);
-      end = new Vec2f(0,0);
+    Line(Vec3f _start, Vec3f _end){
+      start = new Vec3f(0,0);
+      end = new Vec3f(0,0);
       start = _start.get();
       end = _end.get();
     }
     
-    Vec2f * getStart(){
+    Vec3f * getStart(){
       return start;
     }
-    Vec2f * getEnd(){
+    Vec3f * getEnd(){
       return end;
     }
     
-    void setStart(Vec2f * v){
+    void setStart(Vec3f * v){
       start = v->get();
     }
         
-    void setEnd(Vec2f * v){
+    void setEnd(Vec3f * v){
       end = v->get();
     }
     
     //Returns whether the two line collide
     bool collides(Line l){
-      Vec2f * deltaStart = l.getStart()->get();
+      Vec3f * deltaStart = l.getStart()->get();
       deltaStart->subtract(start);
-      Vec2f * deltaEnd = l.getEnd()->get();
+      Vec3f * deltaEnd = l.getEnd()->get();
       deltaEnd->subtract(end);
       return (deltaStart->getX() * deltaEnd->getX() < 0) &&
              (deltaStart->getY() * deltaEnd->getY() < 0);
