@@ -193,7 +193,7 @@ void mouse_init()
   delayMicroseconds(100);
 }
 
-void setup()
+/*void setup()
 {
   Serial.begin(9600);
   mouse_init();
@@ -202,7 +202,7 @@ void setup()
 /*
  * get a reading from the mouse and report it back to the
  * host via the serial line.
- */
+ 
 void loop()
 {
   char mstat;
@@ -210,15 +210,15 @@ void loop()
   char my;
   char mz;
 
-  /* get a reading from the mouse */
-  mouse_write(0xeb);  /* give me data! */
-  mouse_read();      /* ignore ack */
+  // get a reading from the mouse
+  mouse_write(0xeb);  // give me data!
+  mouse_read();      // ignore ack
   mstat = mouse_read();
   mx = mouse_read();
   my = mouse_read();
   mz = mouse_read();
 
-  /* send the data back up */
+  // send the data back up
   Serial.print(mstat, BIN);
   Serial.print("\tX=");
   Serial.print(mx, DEC);
@@ -227,5 +227,5 @@ void loop()
   Serial.print("\tZ=");
   Serial.print(mz, DEC);
   Serial.println();
-  delay(20);  /* twiddle */
-}
+  delay(20);  
+} */
