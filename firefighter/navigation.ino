@@ -1,3 +1,5 @@
+/*
+
 //We need pins for the motors
 
 //Handles the actual navigation, not including position checking
@@ -142,6 +144,7 @@ Vec3f attempt(Vec3f moveToAttempt)
   float anAngle = atan(moveToAttempt.y/moveToAttempt.x);
 }
 
+//3d move
 
 //Rabbot, i'm gonna leave how you want to call this function to you, but here is a function that asks for scan for fire and then figures out how much the robot needs to turn to
 //face the fire
