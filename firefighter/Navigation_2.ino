@@ -12,7 +12,7 @@ void Move(p3vecf pie)
   rotate(rotation);
 }
 
-void CheckDistance (int Pin) {
+float CheckDistance (int Pin) {
   digitalWrite(Pin, LOW);
   delay(2);
   digitalWrite(Pin, HIGH);
@@ -23,7 +23,7 @@ void CheckDistance (int Pin) {
   return pulseIn(Pin, HIGH) / 58.138; //in
 }
 
-void Align {
+void Align () {
   //take ultrasonic readings for all ultrasonics
   bool noBack = true;
   float North = CheckDistance (U1);
@@ -37,7 +37,7 @@ void Align {
     float one = CheckDistance (U1);
     pinMode(leftMotor, OUTPUT);
     analogWrite(leftMotor, 119);
-    delay(1)
+    delay(1);
     float two = CheckDistance (U1);
     while (two <= one) {
       float two = CheckDistance (U1);
@@ -47,7 +47,7 @@ void Align {
     if (noBack == false) {
       float one = CheckDistance (U1);
       analogWrite(leftMotor, 240);
-      delay(1)
+      delay(1);
       float two = CheckDistance (U1);
       while (two <= one) {
       float two = CheckDistance (U1);
@@ -69,7 +69,7 @@ void Align {
     if (noBack == false) {
       float one = CheckDistance (U2);
       analogWrite(leftMotor, 240);
-      delay(1)
+      delay(1);
       float two = CheckDistance (U2);
       while (two <= one) {
       float two = CheckDistance (U2);
@@ -91,7 +91,7 @@ void Align {
     if (noBack == false) {
       float one = CheckDistance (U3);
       analogWrite(leftMotor, 240);
-      delay(1)
+      delay(1);
       float two = CheckDistance (U3);
       while (two <= one) {
       float two = CheckDistance (U3);
@@ -113,7 +113,7 @@ void Align {
     if (noBack == false) {
       float one = CheckDistance (U4);
       analogWrite(leftMotor, 240);
-      delay(1)
+      delay(1);
       float two = CheckDistance (U4);
       while (two <= one) {
       float two = CheckDistance (U4);
