@@ -12,13 +12,16 @@ Serial.begin(9600);
 }
 
 void loop() {
-  
-
+  determineOrientation();
 }
 
-
+void determineOrientation()
+{
+  
+}
 
 // change the hard coded distances to subtract using the checkponts
 // figure out how to communicate with the mouse
 // write out all the instructions for the robot
 // Confirm location with ultrasonics
+
