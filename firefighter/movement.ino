@@ -33,17 +33,32 @@ float Turn(float angle) {
   float Time;
   if (angle > 0) {
     pinMode(motorPin2,OUTPUT);
+    char initialRead = mouse.mouse_Read();
     analogWrite(motorPin2,240);
-    delay (angle * Time);
+    doWhile(mouse.mouse_Read()-initialRead < angle/mouse.radius)
+    {
+      delay(1);
+    }
     analogWrite(motorPin2,119);
   }
   else {
     pinMode(motorPin2,OUTPUT);
+    char initialRead = mouse.mouse_Read();
     analogWrite(motorPin2,119);
-    delay(angle*Time);
+    doWhile( subtractY(mouse.mouse_Read() , initialRead)< angle/mouse.radius)
+    {
+      delay(1);
+    }
     analogWrite(motorPin2,119);
   }
 }
+
+void subtractY(char hex, char idk)
+{
+  //We have to get the mouse hooked up to do readings
+}
+
+
 
 
 //TODO: make sure other files get these definitions
