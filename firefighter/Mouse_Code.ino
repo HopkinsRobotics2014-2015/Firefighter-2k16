@@ -1,3 +1,7 @@
+//It's the red wire. I'm not kidding
+
+
+
 /* Modified mouse initialization to accomondate for
  * Intellimouse vertical wheel (scroll) 
  * by DGar 02/05/2014
