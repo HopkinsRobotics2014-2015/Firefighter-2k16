@@ -14,6 +14,14 @@ float Move(float dist) {
     pinMode(motorPin, OUTPUT);
     analogWrite(motorPin, 240);
     delay(dist * Speed);
+    //I'm going to propose a change here that we could use to see how far we have gone rather than rely on "Speed"
+    /*
+     *  doWhile(float distanceRead < dist)
+     *  {
+     *    distanceRead = mouse.mouse_Read();
+     *    distanceRead = checkDistance(distanceDeterminingSensor) - distanceDeterminingSensor.initialDistance;
+     *  }
+     */
     analogWrite(motorPin, 191);
   }
 }
