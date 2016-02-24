@@ -64,8 +64,7 @@ void visualize() {
 //Use the link function so that you only have to say link(1,2)
 
 //No Walls or Dog code
-
-link(1,2);
+ link(1,2);
  link(2,6);
  link(3,4);
  link(4,8);
@@ -85,6 +84,7 @@ link(1,2);
  link(13,15);
  link(15,16);
  link(16,17);
+
  */
 
 //Map One Dog 1
@@ -96,6 +96,29 @@ void setNeighbors(int map) {
   }
   
   switch (map) {
+
+  case 1:
+  link(1,2);
+  link(2,6);
+  link(3,4);
+  link(4,8);
+  link(5,13);
+  link(5,6);
+  link(6,7);
+  link(6,10);
+  link(7,8);
+  link(7,11);
+  link(8,12);
+  link(9,10);
+  link(9,14);
+  link(10,16);
+  link(11,12);
+  link(12,17);
+  link(13,14);
+  link(13,15);
+  link(15,16);
+  link(16,17);
+  break;
   // Map One Dog 1
   case 3:
     link(1, 2);
