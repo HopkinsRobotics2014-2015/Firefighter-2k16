@@ -16,7 +16,34 @@ Serial.begin(9600);
   mouse_init();
   determineOrientation();
   go(1,2);
+  Align();
+  move (0, 100, -90);
+move (0, 74, -90);
+move (0, 72, 0);
+//firefight
+rotate (180);
+move (0, 74, 90);
+move (0, 72, -90);
+move (0, 107, -90);
+move (0, 74, 0);
+//firefight
+rotate (180);
+move (0, 74, 90);
+move (0, 46, -90);
+move (0, 53, 0);
+//firefight
+move (0, 70, 90);
+move (0, 198, 90);
+move (0, 51, 90);
+move (0, 50, 0);
+//firefight
+rotate (180);
+move (0, 50, 90);
+move (0, 72, 90);
 }
+
+
+
 
 void loop() {
 
@@ -39,6 +66,8 @@ void determineOrientation()
  }
  setNeighbors(oritentation); 
 }
+
+
 
 // change the hard coded distances to subtract using the checkponts
 // figure out how to communicate with the mouse
