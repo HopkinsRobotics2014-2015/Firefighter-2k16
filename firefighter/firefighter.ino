@@ -21,20 +21,44 @@ declareMotor(int i)
   {
     case 1:
     motors[i].pin = 1;
-    motors[i].fullF = 240;
-    motors[i].fullS = 191;
-    motors[i].fullR = 130;
-    CW = 0;
+    motors[i].fullF = 225;
+    motors[i].fullS = 189;
+    motors[i].fullR = 157;
+    CW = i-1;
     break;
     case 2:
     motors[i].fullF = 240;
     motors[i].fullS = 191;
     motors[i].fullR = 130;
     motors[i].pin = 2;
-    CCW = 1;
+    CCW = i-1;
     break;
   }
 }
+
+class motor
+{
+  int pin;
+  int fullF;
+  int fullS;
+  int fullR;
+  void fullF()
+  {
+    pinMode(pin, OUTPUT);
+    analogWrite(this.pin,this.fullF);
+  }
+  void fullS()
+  {
+    pinMode(pin, OUTPUT);
+    analogWrite(this.pin,this.fullS);
+  }
+  void fullR()
+  {
+    pinMode(pin, OUTPUT);
+    analogWrite(this.pin,this.fullR);
+  }
+}
+
 
 void setup() {
 
@@ -45,6 +69,7 @@ void setup() {
   declareMotor(1);
   mouse_init();
   determineOrientation();
+ 
     
   go(1,2);
   Align();
