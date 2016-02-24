@@ -2,6 +2,11 @@
 #define South = 2;
 #define East = 3;
 #define West = 4;
+int CW = 0;
+int CCW = 1;
+
+Vec3f currentOrientation = new Vec3f();
+motor[] motors;
 
 int U1 = 1;
 int U2 = 2;
@@ -10,11 +15,37 @@ int U4 = 4;
 int leftMotor = 5;
 int rightMotor = 6;
 
+declareMotor(int i)
+{
+  switch (i)
+  {
+    case 1:
+    motors[i].pin = 1;
+    motors[i].fullF = 240;
+    motors[i].fullS = 191;
+    motors[i].fullR = 130;
+    CW = 0;
+    break;
+    case 2:
+    motors[i].fullF = 240;
+    motors[i].fullS = 191;
+    motors[i].fullR = 130;
+    motors[i].pin = 2;
+    CCW = 1;
+    break;
+  }
+}
+
 void setup() {
+
   // put your setup code here, to run once:
-Serial.begin(9600);
+  Serial.begin(9600);
+  motors[] = new motor[2];
+  declareMotor(0);
+  declareMotor(1);
   mouse_init();
   determineOrientation();
+    
   go(1,2);
   Align();
   move (0, 100, -90);

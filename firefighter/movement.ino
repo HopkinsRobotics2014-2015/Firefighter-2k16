@@ -32,24 +32,24 @@ float Move(float dist) {
 float Turn(float angle) {
   float Time;
   if (angle > 0) {
-    pinMode(motorPin2,OUTPUT);
+    pinMode(motors[CCW].pin,,OUTPUT);
     char initialRead = mouse.mouse_Read();
-    analogWrite(motorPin2,240);
-    doWhile(mouse.mouse_Read()-initialRead < angle/mouse.radius)
+    analogWrite(motors[CCW].pin,motors[CCW].fullF);
+    doWhile(subtract(mouse.mouse_Read(), initialRead) < angle/mouse.radius)
     {
       delay(1);
     }
-    analogWrite(motorPin2,119);
+    analogWrite(motors[CCW].pin,motors[CCW].fullS);
   }
   else {
-    pinMode(motorPin2,OUTPUT);
+    pinMode(motors[CW].pin,OUTPUT);
     char initialRead = mouse.mouse_Read();
-    analogWrite(motorPin2,119);
+    analogWrite(motors[CW].pin, motors[CW].fullF);
     doWhile( subtractY(mouse.mouse_Read() , initialRead)< angle/mouse.radius)
     {
       delay(1);
     }
-    analogWrite(motorPin2,119);
+    analogWrite(motors[CW].pin,motors[CW].fullS);
   }
 }
 
