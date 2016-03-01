@@ -7,6 +7,7 @@ int CCW = 1;
 
 Vec3f currentOrientation = new Vec3f();
 motor[] motors;
+ultrasonic[] ultrasonics;
 
 int U1 = 1;
 int U2 = 2;
