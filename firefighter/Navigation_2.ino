@@ -16,12 +16,18 @@ void Move(p3vecf pie)
 void rotate(float angle)
 {
   //This is the second hardest program to write here
+  //We need to find rotation. Take measurements on all sides
+  //Begin rotation, and go either until the distance matches the distance we want or starts to decrease.
+  //If it starts to decrease we align to the maximum so as to figure out the angle we have allready turned.
+  //Wait there is an issue. What would happen if the distance was decreasing first.
 }
 
 void callibrate(p3vecf kiwi)
 {
   //This is the hardest program to write here
 }
+
+
 //float CheckDistance (int Pin) {
 //  digitalWrite(Pin, LOW);
 //  delay(2);
