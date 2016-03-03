@@ -15,6 +15,11 @@ void Move(p3vecf pie)
 
 void rotate(float angle)
 {
+  //Here is a proposition
+  float[] firstReads = takeReads();
+  float[] currentReads = takeReads();
+  float startAngle = currentOrientation.angle;
+  fullCW();
   //This is the second hardest program to write here
   //We need to find rotation. Take measurements on all sides
   //Begin rotation, and go either until the distance matches the distance we want or starts to decrease.

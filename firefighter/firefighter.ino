@@ -85,6 +85,16 @@ void fullR();
   motors[CW].fullF();
   motors[CCW].fullR();
 }
+void fullCCW()
+{
+  motors[CW].fullF();
+  motors[CCW].fullF();
+}
+void fullCW()
+{
+  motors[CW].fullR();
+  motors[CCW].fullR();
+}
 
 void setup() {
 
