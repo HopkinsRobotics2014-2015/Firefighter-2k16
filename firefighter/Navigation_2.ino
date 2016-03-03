@@ -3,32 +3,35 @@ int distanceToAlign = 25;
 void Move(p3vecf pie)
 {
   float rotation = atan(pie.y / pie.x);
-  rotation += currentOrientation.angle;
+  rotation -= currentOrientation.angle;
   rotate(rotation);
   float distance = pie.x * pie.x + pie.y * pie.y;
   distance = sqrt(distance);
-  if (distance >= distanceToAlign) {
-    for (distance >= distanceToAlign) {
-    drive(distanceToAlign);
-    distance -= distanceToAlign;
-    Align();
-    }
-  }
   drive(distance);
   rotation = -(currentorientation.angle - pie.angle);
   rotate(rotation);
+  callibrate(pie);
 }
 
-float CheckDistance (int Pin) {
-  digitalWrite(Pin, LOW);
-  delay(2);
-  digitalWrite(Pin, HIGH);
-  delay(5);
-  digitalWrite(Pin, LOW);
-  pinMode (Pin, INPUT);
-  digitalWrite(Pin, HIGH);
-  return pulseIn(Pin, HIGH) / 58.138; //in
+void rotate(float angle)
+{
+  //This is the second hardest program to write here
 }
+
+void callibrate(p3vecf kiwi)
+{
+  //This is the hardest program to write here
+}
+//float CheckDistance (int Pin) {
+//  digitalWrite(Pin, LOW);
+//  delay(2);
+//  digitalWrite(Pin, HIGH);
+//  delay(5);
+//  digitalWrite(Pin, LOW);
+//  pinMode (Pin, INPUT);
+//  digitalWrite(Pin, HIGH);
+//  return pulseIn(Pin, HIGH) / 58.138; //in
+//}
 
 void Align () {
   //take ultrasonic readings for all ultrasonics

@@ -1,9 +1,9 @@
-//Need to define this. This is the variable that is multiplied by the distance to get the time the robot needs to move the specified distance
+//Need to define this. This is the variable that is multiplied by the distance to get the time the robot needs to move the specified distance. Not doing it this way.
 float Speed;
 
 
 //Returns the distance moved
-float Move(float dist) {
+float drive(float dist) {
   int primary = SOUTH;
   fullS();
   takeReads();

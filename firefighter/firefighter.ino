@@ -99,29 +99,29 @@ void setup() {
     
   go(1,2);
   Align();
-  move (0, 100, -90);
-move (0, 74, -90);
-move (0, 72, 0);
+  Move (0, 100, -90);
+  Move (0, 74, -90);
+  Move (0, 72, 0);
 //firefight
-rotate (180);
-move (0, 74, 90);
-move (0, 72, -90);
-move (0, 107, -90);
-move (0, 74, 0);
+  rotate (180);
+  Move (0, 74, 90);
+  Move (0, 72, -90);
+  Move (0, 107, -90);
+  Move (0, 74, 0);
 //firefight
-rotate (180);
-move (0, 74, 90);
-move (0, 46, -90);
-move (0, 53, 0);
+  rotate (180);
+  Move (0, 74, 90);
+  Move (0, 46, -90);
+  Move (0, 53, 0);
 //firefight
-move (0, 70, 90);
-move (0, 198, 90);
-move (0, 51, 90);
-move (0, 50, 0);
+  Move (0, 70, 90);
+  Move (0, 198, 90);
+  Move (0, 51, 90);
+  Move (0, 50, 0);
 //firefight
-rotate (180);
-move (0, 50, 90);
-move (0, 72, 90);
+  rotate (180);
+  Move (0, 50, 90);
+  Move (0, 72, 90);
 }
 
 
