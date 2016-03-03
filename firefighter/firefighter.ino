@@ -37,6 +37,16 @@ declareMotor(int i)
   }
 }
 
+void declareUltrasonics()
+{
+  ultrasonics[] = new ultrasonic[6]
+  for(int i = 0; i < 6; i++)
+  {
+    ultrasonics[i] = new ultrasonic();
+    ultrasonics[i].pin = i+1;
+  }
+}
+
 class motor
 {
   int pin;
@@ -60,6 +70,21 @@ class motor
   }
 }
 
+void fullF()
+{
+  motors[CW].fullR();
+  motors[CCW].fullF();
+}
+void fullS()
+{
+  motors[CW].fullS();
+  motors[CCW].fulls();
+}
+void fullR();
+{
+  motors[CW].fullF();
+  motors[CCW].fullR();
+}
 
 void setup() {
 
@@ -109,9 +134,8 @@ void loop() {
 void determineOrientation()
 {
  int orientation;
- int[] reads = new int[4];
- readUltras;
- reads = UltraReadings;
+ float[] reads = new float[ultrasonics.length];
+ reads = takeReads();
  if(abs(10-reads[South]) < 2 && abs(10-reads[East]) < 2)
  {
   orientation = North;

@@ -4,26 +4,27 @@ float Speed;
 
 //Returns the distance moved
 float Move(float dist) {
-  if (backwards) {
-    pinMode(motorPin, OUTPUT);
-    analogWrite(motorPin, 119);
-    delay(dist * Speed);
-    analogWrite(motorPin, 191);
+  int primary = SOUTH;
+  fullS();
+  takeReads();
+  if(ultrasonics[NORTH].myRead < ultrasonics[SOUTH].myRead)
+  {
+    primary = NORTH;
   }
-  else {
-    pinMode(motorPin, OUTPUT);
-    analogWrite(motorPin, 240);
-    delay(dist * Speed);
-    //I'm going to propose a change here that we could use to see how far we have gone rather than rely on "Speed"
-    /*
-     *  doWhile(float distanceRead < dist)
-     *  {
-     *    distanceRead = mouse.mouse_Read();
-     *    distanceRead = checkDistance(distanceDeterminingSensor) - distanceDeterminingSensor.initialDistance;
-     *  }
-     */
-    analogWrite(motorPin, 191);
+  float startRead = ultrasonics[primary].myRead;
+  fullF();
+  float current;
+  float last;
+  current = startRead;
+  doWhile(abs(current - startRead) < dist)
+  {
+   current = ultrasonics[primary].takeRead();
   }
+
+
+  
+  currentOrientation.y += sin(currentOrientation.angle)*dist;
+  currentOrientation.x += cos(currentOrientation.angle)*dist;
 }
 
 

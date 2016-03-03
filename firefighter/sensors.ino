@@ -3,6 +3,7 @@
 class ultrasonic
 {
   int pin;
+  float myRead;
   float takeRead()
   {
   digitalWrite(this.pin, LOW);
@@ -15,7 +16,18 @@ class ultrasonic
   float theRead;
   theRead = pulseIn(this.pin, HIGH) / 58.138;
   digitalWrite(this.pin, LOW);
+  myRead = theRead;
   return theRead; //in
   }
+}
+
+float[] takeReads()
+{
+  float[] theReads = new float[ultrasonics.length];
+  for(int i = 0; i < ultrasonics.length; i++)
+  {
+    theReads[0] = ultrasonics[i].takeRead();
+  }
+  return theReads;
 }
 
