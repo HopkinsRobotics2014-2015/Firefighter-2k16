@@ -1,7 +1,11 @@
 int distanceToAlign = 25;
 
-void Move(p3vecf pie)
+void Move(float x,float y,float z)
 {
+  pvec3f pie = new pvec3f();
+  float pie.x = x;
+  float pie.y = y;
+  float pie.angle = z;
   float rotation = atan(pie.y / pie.x);
   rotation -= currentOrientation.angle;
   rotate(rotation);
@@ -10,7 +14,8 @@ void Move(p3vecf pie)
   drive(distance);
   rotation = -(currentorientation.angle - pie.angle);
   rotate(rotation);
-  callibrate(pie);
+  //callibrate(pie);
+  return;
 }
 
 void rotate(float angle)
@@ -26,12 +31,12 @@ void rotate(float angle)
   //If it starts to decrease we align to the maximum so as to figure out the angle we have allready turned.
   //Wait there is an issue. What would happen if the distance was decreasing first.
 }
-
-void callibrate(p3vecf kiwi)
+/*
+void callibrate(pvec3f kiwi)
 {
   //This is the hardest program to write here
 }
-
+*/
 
 //float CheckDistance (int Pin) {
 //  digitalWrite(Pin, LOW);

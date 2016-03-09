@@ -21,7 +21,7 @@ float drive(float dist) {
    current = ultrasonics[primary].takeRead();
   }
 
-
+   fullS();
   
   currentOrientation.y += sin(currentOrientation.angle)*dist;
   currentOrientation.x += cos(currentOrientation.angle)*dist;

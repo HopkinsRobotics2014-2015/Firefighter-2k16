@@ -1,6 +1,6 @@
 //Shame on all of you for not making changes over the weekend.
 
-class ultrasonic
+public class ultrasonic
 {
   int pin;
   float myRead;

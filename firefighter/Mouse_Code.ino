@@ -1,3 +1,5 @@
+/*
+
 //It's the red wire. I'm not kidding
 
 
@@ -241,3 +243,4 @@ void loop()
   delay(20);  
 } */
 >>>>>>> origin/master
+*/
