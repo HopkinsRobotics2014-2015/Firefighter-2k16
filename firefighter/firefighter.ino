@@ -1,3 +1,5 @@
+
+// put your setup code here, to run once:
 #define North = 1;
 #define South = 2;
 #define East = 3;
@@ -6,7 +8,8 @@ int CW = 0;
 int CCW = 1;
 
 pvec3f currentOrientation;
-motor[] motors;
+motor[] motors = new motor[2];
+
 ultrasonic[] ultrasonics;
 
 int U1 = 1;
@@ -16,18 +19,22 @@ int U4 = 4;
 int leftMotor = 5;
 int rightMotor = 6;
 
-declareMotor(int i)
+void declareMotor(int i)
 {
+  //motor[] motors = motors;
   switch (i)
   {
-    case 1:
+    case (0):
+    motors[i] = new motor();
     motors[i].pin = 1;
     motors[i].fullF = 225;
     motors[i].fullS = 189;
     motors[i].fullR = 157;
     CW = i-1;
     break;
-    case 2:
+    
+    case (1):
+    motors[i] = new motor();
     motors[i].fullF = 240;
     motors[i].fullS = 191;
     motors[i].fullR = 130;
@@ -53,6 +60,10 @@ class motor
   int fullF;
   int fullS;
   int fullR;
+  motor()
+  {
+    return;
+  }
   void fullF()
   {
     pinMode(pin, OUTPUT);
@@ -122,7 +133,7 @@ void setup() {
   currentOrientation = new pvec3f();
   // put your setup code here, to run once:
   Serial.begin(9600);
-  motors[] = new motor[2];
+  public motors[] = new motor[2];
   declareMotor(0);
   declareMotor(1);
   mouse_init();
@@ -186,4 +197,9 @@ void determineOrientation()
 // figure out how to communicate with the mouse
 // write out all the instructions for the robot
 // Confirm location with ultrasonics
+
+}
+
+
+
 
