@@ -1,3 +1,4 @@
+//I KNOW HOW TO FIX IT
 class motor
 {
   int pin;
