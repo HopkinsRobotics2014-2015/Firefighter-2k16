@@ -1,4 +1,29 @@
-
+class motor
+{
+  int pin;
+  int fullFs;
+  int fullSs;
+  int fullRs;
+  motor()
+  {
+    return;
+  }
+  void fullF()
+  {
+    pinMode(pin, OUTPUT);
+    analogWrite(this -> pin,this -> fullFs);
+  }
+  void fullS()
+  {
+    pinMode(pin, OUTPUT);
+    analogWrite(this -> pin,this -> fullSs);
+  }
+  void fullR()
+  {
+    pinMode(pin, OUTPUT);
+    analogWrite(this->pin,this  -> fullRs);
+  }
+};
 // put your setup code here, to run once:
 #define North = 1;
 #define South = 2;
@@ -27,17 +52,17 @@ void declareMotor(int i)
     case (0):
     motors[i] = new motor();
     motors[i].pin = 1;
-    motors[i].fullF = 225;
-    motors[i].fullS = 189;
-    motors[i].fullR = 157;
+    motors[i].fullFs = 225;
+    motors[i].fullSs = 189;
+    motors[i].fullRs = 157;
     CW = i-1;
     break;
     
     case (1):
     motors[i] = new motor();
-    motors[i].fullF = 240;
-    motors[i].fullS = 191;
-    motors[i].fullR = 130;
+    motors[i].fullFs = 240;
+    motors[i].fullSs = 191;
+    motors[i].fullRs = 130;
     motors[i].pin = 2;
     CCW = i-1;
     break;
@@ -54,32 +79,7 @@ void declareUltrasonics()
   }
 }
 
-class motor
-{
-  int pin;
-  int fullF;
-  int fullS;
-  int fullR;
-  motor()
-  {
-    return;
-  }
-  void fullF()
-  {
-    pinMode(pin, OUTPUT);
-    analogWrite(this.pin,this.fullF);
-  }
-  void fullS()
-  {
-    pinMode(pin, OUTPUT);
-    analogWrite(this.pin,this.fullS);
-  }
-  void fullR()
-  {
-    pinMode(pin, OUTPUT);
-    analogWrite(this.pin,this.fullR);
-  }
-}
+
 
 void fullF()
 {
