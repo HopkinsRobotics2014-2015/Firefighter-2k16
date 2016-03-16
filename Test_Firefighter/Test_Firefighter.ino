@@ -1,111 +1,10 @@
+#include <TheLibrary.h>
+
 //I KNOW HOW TO FIX IT
 
-public class pvec3f
-{
-  /*
-  private:
-    float x, y, angle;
-  public:
-   */
-   pvec3f(float _x = 0, float _y = 0, float _angle = 0) {
-      x = _x;
-      y = _y;
-      angle = _angle;
-    }
-    pvec3f()
-    {
-      x = 0;
-      y = 0;
-      angle = 0;
-    }
 
-    //Gets a copy of the vector
-   pvec3f * get() {
-     pvec3f * ret = newpvec3f(x, y);
-      return ret;
-    }
 
-    float getX() {
-      return x;
-    }
-    float getY() {
-      return y;
-    }
-    float getAngle() {
-      return angle;
-    }
-    void setX(float _x) {
-      x = _x;
-    }
-    void setY(float _y) {
-      y = _y;
-    }
-    void setAngle(float _angle) {
-      angle = _angle;
-    }
 
-    //Adds v to the current vector
-    void add(Vec3f * v) {
-      x += v->getX();
-      y += v->getY();
-      angle += v->getAngle();
-    }
-    //Sets this = this - v
-    void subtract(Vec3f * v) {
-      x -= v->getX();
-      y -= v->getY();
-      angle -= v->getAngle();
-    }
-
-    //Returns the dot product
-    float dot(Vec3f * v) {
-      return x * v->getX() + y * v->getY();
-    }
-
-    //Getting the magnitude squared is faster since there is no need
-    //to take a square root
-    float magnitudeSquared() {
-      return x * x + y * y;
-    }
-
-    float magnitude() {
-      return sqrt(magnitudeSquared());
-    }
-
-    void operator=(Vec3f * v) {
-      x = v->getX();
-      y = v->getY();
-      angle = v->getAngle();
-    }
-
-};
-
-class motor
-{
-  int pin;
-  int fullFs;
-  int fullSs;
-  int fullRs;
-  motor()
-  {
-    return;
-  }
-  void fullF()
-  {
-    pinMode(pin, OUTPUT);
-    analogWrite((*this).pin,(*this).fullFs);
-  }
-  void fullS()
-  {
-    pinMode(pin, OUTPUT);
-    analogWrite((*this).pin,(*this).fullSs);
-  }
-  void fullR()
-  {
-    pinMode(pin, OUTPUT);
-    analogWrite(this->pin,this  -> fullRs);
-  }
-}
 
 
 
@@ -118,12 +17,11 @@ int CW = 0;
 int CCW = 1;
 
 
+pvec3f currentOrientation = new pvec3f();
 
-  currentOrientation = new pvec3f();
-pvec3f currentOrientation;
-motor[] motors = new motor[2];
+motor motors[2] = new motor[2];
 
-ultrasonic[] ultrasonics;
+ultrasonic ultrasonics[];
 
 int U1 = 1;
 int U2 = 2;
@@ -138,21 +36,21 @@ void declareMotor(int i)
   switch (i)
   {
     case (0):
-    motors[i] = new motor();
-    motors[i].pin = 1;
-    motors[i].fullFs = 225;
-    motors[i].fullSs = 189;
-    motors[i].fullRs = 157;
-    CW = i-1;
+    motors[0] = new motor();
+    motors[0].pin = 1;
+    motors[0].fullFs = 225;
+    motors[0].fullSs = 189;
+    motors[0].fullRs = 157;
+    CW = 0;
     break;
     
     case (1):
-    motors[i] = new motor();
-    motors[i].fullFs = 240;
-    motors[i].fullSs = 191;
-    motors[i].fullRs = 130;
-    motors[i].pin = 2;
-    CCW = i-1;
+    (*motors[1]) = new motor();
+    motors[1].fullFs = 240;
+    motors[1].fullSs = 191;
+    motors[1].fullRs = 130;
+    motors[1].pin = 2;
+    CCW = 1;
     break;
   }
 }
@@ -264,7 +162,7 @@ void loop() {
 void determineOrientation()
 {
  int orientation;
- float[] reads = new float[ultrasonics.length];
+ float reads[] = new float[ultrasonics.length];
  reads = takeReads();
  if(abs(10-reads[South]) < 2 && abs(10-reads[East]) < 2)
  {
@@ -293,16 +191,6 @@ checkpoint[] checkpoints;
 
 
 
-class checkpoint {
-  float x;
-  float y;
-  ArrayList<checkpoint> neighbors;
-  checkpoint(float _x, float _y) { 
-    x = _x;
-    y = _y;
-    neighbors = new ArrayList <checkpoint> ();
-  }
-}
 
 //Map One Dog 1
 
@@ -314,6 +202,7 @@ void link(int a, int b) {
 }
 
 //Serves as walls for the map
+/*
 class Line
 {
   private:
@@ -352,7 +241,7 @@ class Line
              (deltaStart->getY() * deltaEnd->getY() < 0);
     }
 };
-
+*/
 void visualize() {
   for (checkpoint cp : checkpoints) {
     ellipse(map(cp.x, 0, 244, 40, 760), map(cp.y, 0, 244, 40, 560), 20, 20);
@@ -927,7 +816,7 @@ float WallFollow(int wallSide) {
 
 
 
-Vec3f turnAround()
+pvec3f turnAround()
 {
   float apple = turn(PI);
   if (apple < PI)
@@ -950,7 +839,7 @@ Vec3f turnAround()
   }
 }
 
-Vec3f attempt(Vec3f moveToAttempt)
+pvec3f attempt(pvec3f moveToAttempt)
 {
   float anAngle = atan(moveToAttempt.y/moveToAttempt.x);
 }
@@ -1004,26 +893,7 @@ void returnHome() {
 
 //Shame on all of you for not making changes over the weekend.
 
-public class ultrasonic
-{
-  int pin;
-  float myRead;
-  float takeRead()
-  {
-  digitalWrite(this.pin, LOW);
-  delay(2);
-  digitalWrite(this.pin, HIGH);
-  delay(5);
-  digitalWrite(this.pin, LOW);
-  pinMode (this.pin, INPUT);
-  digitalWrite(this.pin, HIGH);
-  float theRead;
-  theRead = pulseIn(this.pin, HIGH) / 58.138;
-  digitalWrite(this.pin, LOW);
-  myRead = theRead;
-  return theRead; //in
-  }
-}
+
 
 float[] takeReads()
 {
