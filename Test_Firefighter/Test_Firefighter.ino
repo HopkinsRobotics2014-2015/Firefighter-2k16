@@ -9,19 +9,18 @@
 
 
 // put your setup code here, to run once:
-#define North = 1;
-#define South = 2;
-#define East = 3;
-#define West = 4;
+int North = 1;
+int South = 2;
+int East = 3;
+int West = 4;
 int CW = 0;
 int CCW = 1;
 
+pvec3f currentOrientation;
 
-pvec3f currentOrientation = new pvec3f();
-
-motor motors[2] = new motor[2];
-
-ultrasonic ultrasonics[];
+motor motors[2];
+float reads[6];
+ultrasonic ultrasonics[6];
 
 int U1 = 1;
 int U2 = 2;
@@ -33,10 +32,11 @@ int rightMotor = 6;
 void declareMotor(int i)
 {
   //motor[] motors = motors;
+  motor *r = new motor();
   switch (i)
   {
     case (0):
-    motors[0] = new motor();
+    motors[0] = *r;
     motors[0].pin = 1;
     motors[0].fullFs = 225;
     motors[0].fullSs = 189;
@@ -45,23 +45,25 @@ void declareMotor(int i)
     break;
     
     case (1):
-    (*motors[1]) = new motor();
+    motors[1] = *r;
     motors[1].fullFs = 240;
     motors[1].fullSs = 191;
     motors[1].fullRs = 130;
     motors[1].pin = 2;
     CCW = 1;
     break;
+    default:
+    break;
   }
 }
 
 void declareUltrasonics()
 {
-  ultrasonics[] = new ultrasonic[6]
-  for(int i = 0; i < 6; i++)
+
+  for(int *i = 0; *i < 6; *i++)
   {
-    ultrasonics[i] = new ultrasonic();
-    ultrasonics[i].pin = i+1;
+    ultrasonics[*i] = new ultrasonic();
+    ultrasonics[*i].pin = i+1;
   }
 }
 
@@ -69,28 +71,28 @@ void declareUltrasonics()
 
 void fullF()
 {
-  motors[CW].fullR();
-  motors[CCW].fullF();
+  motors[*CW].fullR();
+  motors[*CCW].fullF();
 }
 void fullS()
 {
-  motors[CW].fullS();
-  motors[CCW].fulls();
+  motors[*CW].fullS();
+  motors[*CCW].fulls();
 }
 void fullR();
 {
-  motors[CW].fullF();
-  motors[CCW].fullR();
+  motors[*CW].fullF();
+  motors[*CCW].fullR();
 }
 void fullCCW()
 {
-  motors[CW].fullF();
-  motors[CCW].fullF();
+  motors[*CW].fullF();
+  motors[*CCW].fullF();
 }
 void fullCW()
 {
-  motors[CW].fullR();
-  motors[CCW].fullR();
+  motors[*CW].fullR();
+  motors[*CCW].fullR();
 }
 
 void setup() {
@@ -162,9 +164,8 @@ void loop() {
 void determineOrientation()
 {
  int orientation;
- float reads[] = new float[ultrasonics.length];
- reads = takeReads();
- if(abs(10-reads[South]) < 2 && abs(10-reads[East]) < 2)
+ takeReads();
+ if((10-reads[South]) < 2 && -2 < (10- reads[South]) && (10-reads[East]) < 2 && (10-reads[East]) > -2)
  {
   orientation = North;
   //minimize(East);
@@ -183,7 +184,7 @@ void determineOrientation()
 // write out all the instructions for the robot
 // Confirm location with ultrasonics
 
-}
+
 
 
 //Checkpoints Start
@@ -533,8 +534,9 @@ void Move(float x,float y,float z)
 void rotate(float angle)
 {
   //Here is a proposition
-  float[] firstReads = takeReads();
-  float[] currentReads = takeReads();
+  takeReads();
+  float firstReads[ultrasonics.length] = reads
+  float currentReads[ultrasonics.length] = reads;
   float startAngle = currentOrientation.angle;
   fullCW();
   //This is the second hardest program to write here
@@ -895,13 +897,14 @@ void returnHome() {
 
 
 
-float[] takeReads()
+void takeReads()
 {
-  float[] theReads = new float[ultrasonics.length];
-  for(int i = 0; i < ultrasonics.length; i++)
+  public float theReads[6];
+  for(int *i = 0; *i < ultrasonics.length; *i++)
   {
-    theReads[0] = ultrasonics[i].takeRead();
+    *theReads[0] = *ultrasonics[*i].takeRead();
   }
-  return theReads;
+  *reads = *theReads;
+  return;
 }
 
