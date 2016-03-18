@@ -15,12 +15,14 @@ int East = 3;
 int West = 4;
 int CW = 0;
 int CCW = 1;
+int flamePin = 0;
 
 pvec3f currentOrientation;
 
 motor motors[2];
 float reads[6];
 ultrasonic ultrasonics[6];
+checkpoint checkpoints[17];
 
 int U1 = 1;
 int U2 = 2;
@@ -60,10 +62,11 @@ void declareMotor(int i)
 void declareUltrasonics()
 {
 
-  for(int *i = 0; *i < 6; *i++)
+  for(int i = 0; i < 6; i++)
   {
-    ultrasonics[*i] = new ultrasonic();
-    ultrasonics[*i].pin = i+1;
+    ultrasonic *r = new ultrasonic();
+    ultrasonics[i] = *r;
+    ultrasonics[i].pin = i+1;
   }
 }
 
@@ -71,32 +74,32 @@ void declareUltrasonics()
 
 void fullF()
 {
-  motors[*CW].fullR();
-  motors[*CCW].fullF();
+  motors[CW].fullR();
+  motors[CCW].fullF();
 }
 void fullS()
 {
-  motors[*CW].fullS();
-  motors[*CCW].fulls();
+  motors[CW].fullS();
+  motors[CCW].fullS();
 }
-void fullR();
+void fullR()
 {
-  motors[*CW].fullF();
-  motors[*CCW].fullR();
+  motors[CW].fullF();
+  motors[CCW].fullR();
 }
 void fullCCW()
 {
-  motors[*CW].fullF();
-  motors[*CCW].fullF();
+  motors[CW].fullF();
+  motors[CCW].fullF();
 }
 void fullCW()
 {
-  motors[*CW].fullR();
-  motors[*CCW].fullR();
+  motors[CW].fullR();
+  motors[CCW].fullR();
 }
 
 void setup() {
-    checkpoints = new checkpoint[17];
+
   checkpoints[0] = new checkpoint (23, 42);
   checkpoints[1] = new checkpoint (23, 114);
   checkpoints[2] = new checkpoint (23, 166);
@@ -114,16 +117,16 @@ void setup() {
   checkpoints[14] = new checkpoint (220, 23);//(220,23);
   checkpoints[15] = new checkpoint (220, 114);//(220,11);
   checkpoints[16] = new checkpoint (220, 222);//(220,22);
-  background(255);
-  size(800, 600);
+  //background(255);
+  //size(800, 600);
   visualize();
   
   // put your setup code here, to run once:
   Serial.begin(9600);
-  public motors[] = new motor[2];
+
   declareMotor(0);
   declareMotor(1);
-  mouse_init();
+
   determineOrientation();
  
     
@@ -291,7 +294,7 @@ void visualize() {
 
 void setNeighbors(int map) {
   
-  for (checkpoint cp : checkpoints){
+   for (checkpoint cp : checkpoints){
     cp.neighbors.clear();
   }
   
@@ -502,7 +505,7 @@ void setNeighbors(int map) {
 }
 
 void draw(){
-  background(255);
+  //background(255);
   visualize();
 }
 
@@ -531,14 +534,30 @@ void Move(float x,float y,float z)
   return;
 }
 
-void rotate(float angle)
+float rotate(float angle)
 {
   //Here is a proposition
   takeReads();
   float firstReads[ultrasonics.length] = reads
-  float currentReads[ultrasonics.length] = reads;
-  float startAngle = currentOrientation.angle;
-  fullCW();
+   float currentReads[ultrasonics.length] = reads;
+   float startAngle = currentOrientation.angle;
+   fullCW();
+   float lowestRead= 100000;
+   int smallDirection;
+   for(int i = 0; i < 6; i++)
+   {
+     if(reads[i] < lowestRead)
+     {
+       lowestRead = reads[i];
+       smallDirection = i;
+     }
+   }
+  doWhile(float angleTurned < 15)
+  {
+    ultrasonics[smallDirection].takeRead();
+        
+  }
+  return angleTurned;
   //This is the second hardest program to write here
   //We need to find rotation. Take measurements on all sides
   //Begin rotation, and go either until the distance matches the distance we want or starts to decrease.
@@ -709,7 +728,7 @@ if (Temps[i] > VALUE HERE) {
 }
 
 //records which sensor is true
-void fireHere() {
+int fireHere() {
   return fire;
 }
 
@@ -820,22 +839,22 @@ float WallFollow(int wallSide) {
 
 pvec3f turnAround()
 {
-  float apple = turn(PI);
+  float apple = rotate(PI);
   if (apple < PI)
   {
-    Move(-1.5);
-    float kiwi = turn(PI);
+    drive(-1.5);
+    float kiwi = rotate(PI);
     if(kiwi < PI)
     {
-    turn(-kiwi);
-    Move(-5);
-    float peach = turn(PI);
-    Move(-5);
-    turn(-apple);
+    rotate(-kiwi);
+    drive(-5);
+    float peach = rotate(PI);
+    drive(-5);
+    rotate(-apple);
     }
     else
     {
-      Move(-1.5);
+      drive(-1.5);
       turn(-(apple));
     }
   }
@@ -856,11 +875,12 @@ pvec3f attempt(pvec3f moveToAttempt)
 void fireTime() {
   // this intializes the sensors in terms of degrees.
   //until we know if the robot can rotate fully in one room, I am coding for five fire sensors so that rotation wont be an issue with this configuration
-  int fireSensor1 = 0;
-  int fireSensor2 = 0;
-  int fireSensor3 = PI / 2;
-  int fireSensor4 = PI;
-  int fireSensor5 = -PI / 2;
+  int fireSensor[5];
+  fireSensor[0] = 0;
+  fireSensor[1] = 0;
+  fireSensor[2] = PI / 2;
+  fireSensor[3] = PI;
+  fireSensor[4] = -PI / 2;
   if (searchForFire()) {
     int Sensor = fireHere();
     for (int i = 1; i < 6; i++) {
@@ -879,10 +899,10 @@ void fireTime() {
 void sprayAndPray() {
   while (flameSensorRead(0)) {
     //IM OFFLINE RN BUT FIND FAN COMMAND. RUN FAN AT MAX
-    pinMode(motorPin, OUTPUT);
-    analogWrite(motorPin, 210);
+    pinMode(flamePin, OUTPUT);
+    analogWrite(flamePin, 210);
   }
-  analogWrite(motorPin, 191);
+  analogWrite(flamePin, 191);
   returnHome();
 }
 
@@ -899,10 +919,10 @@ void returnHome() {
 
 void takeReads()
 {
-  public float theReads[6];
-  for(int *i = 0; *i < ultrasonics.length; *i++)
+  float theReads[6];
+  for(int i = 0; i < 6; i++)
   {
-    *theReads[0] = *ultrasonics[*i].takeRead();
+    theReads[0] = ultrasonics[i].takeRead();
   }
   *reads = *theReads;
   return;
