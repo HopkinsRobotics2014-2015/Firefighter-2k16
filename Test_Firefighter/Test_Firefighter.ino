@@ -87,6 +87,7 @@ void declareUltrasonics()
   ultrasonics[5].pinT = 21;
 }
 
+
 float takeRead(char r)
 {
     if( r = 'N'){
@@ -796,14 +797,14 @@ float Speed;
 
 //Returns the distance moved
 float drive(float dist) {
-  int primary = SOUTH;
+  int primary = S;
   fullS();
   takeReads();
-  if(ultrasonics[NORTH].myRead < ultrasonics[SOUTH].myRead)
+  if(takeRead(N) < takeRead(S))
   {
-    primary = NORTH;
+    primary = N;
   }
-  float startRead = ultrasonics[primary].myRead;
+  float startRead = takeReads(primary);
   fullF();
   float current;
   float last;
