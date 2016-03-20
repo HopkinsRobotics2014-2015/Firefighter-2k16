@@ -139,51 +139,69 @@ void fullCW()
 }
 
 void setup() {
-
-  checkpoints[0] = new checkpoint (23, 42);
+//This accounts for the 30 centimeters that the robot is. I am accounting for it as +40 cm
+  checkpoints[0] = new checkpoint (23, 47);
+  checkpoints[1] = new checkpoint (23, 114);
+  checkpoints[2] = new checkpoint (32, 221);
+  checkpoints[3] = new checkpoint (99, 23);
+  checkpoints[4] = new checkpoint (99, 114);
+  checkpoints[5] = new checkpoint (99, 128);
+  checkpoints[6] = new checkpoint (99, 221);
+  checkpoints[7] = new checkpoint (166,221);
+  checkpoints[8] = new checkpoint (173,23);
+  checkpoints[9] = new checkpoint (173,90);
+  checkpoints[10] = new checkpoint (221,23);
+  checkpoints[11] = new checkpoint (221,128);
+  checkpoints[12] = new checkpoint (221,195);
+  
+  
+/*
   checkpoints[1] = new checkpoint (23, 114);
   checkpoints[2] = new checkpoint (23, 166);
   checkpoints[3] = new checkpoint (23, 221);
-  checkpoints[4] = new checkpoint (99, 23);
+    checkpoints[4] = new checkpoint (99, 23);
   checkpoints[5] = new checkpoint (99, 114);
 //  checkpoints[6] = new checkpoint (99, 175);
   checkpoints[6] = new checkpoint (99, 221);
 //  checkpoints[7] = new checkpoint (143, 73);
 //  checkpoints[8] = new checkpoint (143, 114);
-  checkpoints[9] = new checkpoint (150, 175);//(150,17);
+  checkpoints[7] = new checkpoint (150, 175);//(150,17);
   checkpoints[10] = new checkpoint (150, 221);//(150,22);
   checkpoints[11] = new checkpoint (173, 23);//(169,23);
   checkpoints[12] = new checkpoint (173, 73);//(169,73);
   checkpoints[13] = new checkpoint (220, 23);//(220,23);
   checkpoints[14] = new checkpoint (220, 114);//(220,11);
   checkpoints[15] = new checkpoint (220, 222);//(220,22);
-  //background(255);
-  //size(800, 600);
-  visualize();
+*/
+
+  //visualize();
   
   // put your setup code here, to run once:
   Serial.begin(9600);
 
   declareMotor(0);
   declareMotor(1);
+  currentOrientation.x = 99;
+  currentOrientation.y = 23;
+  currentOrientation.angle = 0;
 
   determineOrientation();
  
     
 
   Align();
-  Move (0, 100, -90);
-  Move (0, 74, -90);
+  Move (0, 100, -PI/2.0);
+  Move (0, 74, -PI/2.0);
   Move (0, 72, 0);
 //firefight
   rotate (180);
-  Move (0, 74, 90);
-  Move (0, 72, -90);
-  Move (0, 107, -90);
+  Move (0, 74, PI/2.0);
+  Move (0, 72, -PI/2.0);
+  Move (0, 107, -PI/2.0);
   Move (0, 74, 0);
 //firefight
   rotate (180);
-  Move (0, 74, 90);
+  Move (0, 74, PI/2.0);
   Move (0, 46, -90);
   Move (0, 53, 0);
 //firefight
@@ -217,7 +235,7 @@ void determineOrientation()
   currentOrientation.x = 23;
   currentOrientation.y = 42;
  }
- setNeighbors(orientation); 
+ //setNeighbors(orientation); 
 }
 
 
@@ -239,12 +257,12 @@ void determineOrientation()
 //Map One Dog 1
 
 
-
+/*
 void link(int a, int b) {
   checkpoints[a-1].neighbors.add(checkpoints[b-1]);
   checkpoints[b-1].neighbors.add(checkpoints[a-1]);
 }
-
+*/
 //Serves as walls for the map
 /*
 class Line
@@ -286,7 +304,7 @@ class Line
     }
 };
 */
-
+/*
 void visualize() {
   for (checkpoint cp : checkpoints) {
     ellipse(map(cp.x, 0, 244, 40, 760), map(cp.y, 0, 244, 40, 560), 20, 20);
@@ -295,7 +313,7 @@ void visualize() {
     }
   }
 }
-
+*/
 //checkpoint 1 hard way example
 //THis is assuming i have the checkpoints be values and not variables
 //checkpoints.get(1).neighbors.add(checkpoint.get(2));
@@ -333,7 +351,7 @@ void visualize() {
  */
 
 //Map One Dog 1
-
+/*
 void setNeighbors(int map) {
   
    for (checkpoint cp : checkpoints){
@@ -550,7 +568,7 @@ void draw(){
   //background(255);
   visualize();
 }
-
+*/
 
 
 // Checkpoints Start
@@ -559,10 +577,20 @@ int distanceToAlign = 25;
 void Move(float x,float y,float z)
 {
   pvec3f *pie = new pvec3f();
+  float rotation;
   pie->setX(x);
   pie->setY(y);
   pie->setAngle(z);
-  float rotation = atan(pie->getY() / pie->getX());
+  if(pie->getX() != 0){
+  rotation = atan(pie->getY() / pie->getX());
+  }
+  else if(pie->getY() > 0)
+  {
+    rotation = PI/2.0;
+  }
+  else{
+    rotation = -PI/2.0;
+  }
   rotation -= currentOrientation.angle;
   rotate(rotation);
   float distance = pie->getX() * pie->getX() + pie->getY()* pie->getY();
