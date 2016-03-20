@@ -1,29 +1,30 @@
-//Need to define this. This is the variable that is multiplied by the distance to get the time the robot needs to move the specified distance
+//Need to define this. This is the variable that is multiplied by the distance to get the time the robot needs to move the specified distance. Not doing it this way.
 float Speed;
 
 
 //Returns the distance moved
-float Move(float dist) {
-  if (backwards) {
-    pinMode(motorPin, OUTPUT);
-    analogWrite(motorPin, 119);
-    delay(dist * Speed);
-    analogWrite(motorPin, 191);
+float drive(float dist) {
+  int primary = SOUTH;
+  fullS();
+  takeReads();
+  if(ultrasonics[NORTH].myRead < ultrasonics[SOUTH].myRead)
+  {
+    primary = NORTH;
   }
-  else {
-    pinMode(motorPin, OUTPUT);
-    analogWrite(motorPin, 240);
-    delay(dist * Speed);
-    //I'm going to propose a change here that we could use to see how far we have gone rather than rely on "Speed"
-    /*
-     *  doWhile(float distanceRead < dist)
-     *  {
-     *    distanceRead = mouse.mouse_Read();
-     *    distanceRead = checkDistance(distanceDeterminingSensor) - distanceDeterminingSensor.initialDistance;
-     *  }
-     */
-    analogWrite(motorPin, 191);
+  float startRead = ultrasonics[primary].myRead;
+  fullF();
+  float current;
+  float last;
+  current = startRead;
+  doWhile(abs(current - startRead) < dist)
+  {
+   current = ultrasonics[primary].takeRead();
   }
+
+   fullS();
+  
+  currentOrientation.y += sin(currentOrientation.angle)*dist;
+  currentOrientation.x += cos(currentOrientation.angle)*dist;
 }
 
 
@@ -32,24 +33,24 @@ float Move(float dist) {
 float Turn(float angle) {
   float Time;
   if (angle > 0) {
-    pinMode(motorPin2,OUTPUT);
+    pinMode(motors[CCW].pin,,OUTPUT);
     char initialRead = mouse.mouse_Read();
-    analogWrite(motorPin2,240);
-    doWhile(mouse.mouse_Read()-initialRead < angle/mouse.radius)
+    analogWrite(motors[CCW].pin,motors[CCW].fullF);
+    doWhile(subtract(mouse.mouse_Read(), initialRead) < angle/mouse.radius)
     {
       delay(1);
     }
-    analogWrite(motorPin2,119);
+    analogWrite(motors[CCW].pin,motors[CCW].fullS);
   }
   else {
-    pinMode(motorPin2,OUTPUT);
+    pinMode(motors[CW].pin,OUTPUT);
     char initialRead = mouse.mouse_Read();
-    analogWrite(motorPin2,119);
+    analogWrite(motors[CW].pin, motors[CW].fullF);
     doWhile( subtractY(mouse.mouse_Read() , initialRead)< angle/mouse.radius)
     {
       delay(1);
     }
-    analogWrite(motorPin2,119);
+    analogWrite(motors[CW].pin,motors[CW].fullS);
   }
 }
 

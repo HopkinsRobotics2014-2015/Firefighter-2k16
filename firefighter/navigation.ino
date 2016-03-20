@@ -4,20 +4,26 @@
 
 //Handles the actual navigation, not including position checking
 
-class Vec3f
+public class pvec3f
 {
   private:
     float x, y, angle;
   public:
-    Vec3f(float _x = 0, float _y = 0, float _angle = 0) {
+   pvec3f(float _x = 0, float _y = 0, float _angle = 0) {
       x = _x;
       y = _y;
       angle = _angle;
     }
+    pvec3f()
+    {
+      x = 0;
+      y = 0;
+      angle = 0;
+    }
 
     //Gets a copy of the vector
-    Vec3f * get() {
-      Vec3f * ret = new Vec3f(x, y);
+   pvec3f * get() {
+     pvec3f * ret = newpvec3f(x, y);
       return ret;
     }
 
@@ -80,20 +86,20 @@ class Vec3f
 class Line
 {
   private:
-    Vec3f * start;
-    Vec3f * end;
+   pvec3f * start;
+   pvec3f * end;
   public:
-    Line(Vec3f _start, Vec3f _end) {
-      start = new Vec3f(0, 0);
-      end = new Vec3f(0, 0);
+    Line(Vec3f _start,pvec3f _end) {
+      start = newpvec3f(0, 0);
+      end = newpvec3f(0, 0);
       start = _start.get();
       end = _end.get();
     }
 
-    Vec3f * getStart() {
+   pvec3f * getStart() {
       return start;
     }
-    Vec3f * getEnd() {
+   pvec3f * getEnd() {
       return end;
     }
 
@@ -107,9 +113,9 @@ class Line
 
     //Returns whether the two line collide
     bool collides(Line l) {
-      Vec3f * deltaStart = l.getStart()->get();
+     pvec3f * deltaStart = l.getStart()->get();
       deltaStart->subtract(start);
-      Vec3f * deltaEnd = l.getEnd()->get();
+     pvec3f * deltaEnd = l.getEnd()->get();
       deltaEnd->subtract(end);
       return (deltaStart->getX() * deltaEnd->getX() < 0) &&
              (deltaStart->getY() * deltaEnd->getY() < 0);
