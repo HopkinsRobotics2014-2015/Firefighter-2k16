@@ -217,7 +217,7 @@ void determineOrientation()
   currentOrientation.x = 23;
   currentOrientation.y = 42;
  }
- setNeighbors(oritentation); 
+ setNeighbors(orientation); 
 }
 
 
@@ -231,7 +231,7 @@ void determineOrientation()
 
 
 //Checkpoints Start
-checkpoint checkpoints[17];
+
 
 
 
