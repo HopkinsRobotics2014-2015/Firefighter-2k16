@@ -40,17 +40,17 @@ void declareMotor(int i)
     case (0):
     motors[0] = *r;
     motors[0].pin = 11;
-    motors[0].fullFs = 240;
+    motors[0].fullFs = 243;
     motors[0].fullSs = 191;
-    motors[0].fullRs = 157;
+    motors[0].fullRs = 140;
     CW = 0;
     break;
     
     case (1):
     motors[1] = *r;
-    motors[1].fullFs = 240;
+    motors[1].fullFs = 243;
     motors[1].fullSs = 191;
-    motors[1].fullRs = 145;
+    motors[1].fullRs = 140;
     motors[1].pin = 12;
     CCW = 1;
     break;
@@ -68,30 +68,30 @@ void declareUltrasonics()
     ultrasonics[i] = *r;
   }
   //Front
-  ultrasonic[0].pinE = 14;
-  ultrasonic[0].pinT = 15;
+  ultrasonics[0].pinE = 14;
+  ultrasonics[0].pinT = 15;
   //Right F
-  ultrasonic[1].pinE = 7;
-  ultrasonic[1].pinT = 6;
+  ultrasonics[1].pinE = 7;
+  ultrasonics[1].pinT = 6;
   //Right B
-  ultrasonic[2].pinE = 4;
-  ultrasonic[2].pinT = 3;
+  ultrasonics[2].pinE = 4;
+  ultrasonics[2].pinT = 3;
   //Left F
-  ultrasonic[3].pinE = 18;
-  ultrasonic[3].pinT = 19;
+  ultrasonics[3].pinE = 18;
+  ultrasonics[3].pinT = 19;
   //Left B
-  ultrasonic[4].pinE = 16;
-  ultrasonic[4].pinT = 17;
+  ultrasonics[4].pinE = 16;
+  ultrasonics[4].pinT = 17;
   //Back
-  ultrasonic[5].pinE = 20;
-  ultrasonic[5].pinT = 21;
+  ultrasonics[5].pinE = 20;
+  ultrasonics[5].pinT = 21;
 }
 
 float takeRead(char r)
 {
   switch (r)
   {
-    case (N):
+    case ('N'):
     
   }
 }
@@ -215,7 +215,7 @@ void determineOrientation()
 
 
 //Checkpoints Start
-checkpoint[] checkpoints;
+checkpoint checkpoints[17];
 
 
 
@@ -946,7 +946,7 @@ void takeReads()
   float theReads[6];
   for(int i = 0; i < 6; i++)
   {
-    theReads[0] = ultrasonics[i].takeRead();
+    theReads[i] = ultrasonics[i].takeRead();
   }
   *reads = *theReads;
   return;
