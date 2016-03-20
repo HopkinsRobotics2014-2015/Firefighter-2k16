@@ -580,6 +580,7 @@ float rotate(float angle)
   takeReads();
   float firstReads[ultrasonics.length] = reads
    float currentReads[ultrasonics.length] = reads;
+   float lastRead[ultrasonics.length] = reads;
    float startAngle = currentOrientation.angle;
    fullCW();
    float lowestRead= 100000;
@@ -592,9 +593,9 @@ float rotate(float angle)
        smallDirection = i;
      }
    }
-  doWhile(float angleTurned < 15)
+  while(currentRead[smallDirection] > lastRead[smallDirection])
   {
-    ultrasonics[smallDirection].takeRead();
+    ultrasonic[smallDirection].takeRead();
         
   }
   return angleTurned;
@@ -625,10 +626,10 @@ void callibrate(pvec3f kiwi)
 void Align () {
   //take ultrasonic readings for all ultrasonics
   bool noBack = true;
-  float North = CheckDistance (U1);
-  float East = CheckDistance (U2);
-  float South = CheckDistance (U3);
-  float West = CheckDistance (U4);
+  float North = takeRead('N');
+  float East = takeRead('E');
+  float South = takeRead('S');
+  float West = takeRead('W');
   float first = min (U1, U2);
   float second = min (first, U3);
   float Min = min (second, U4);
@@ -728,10 +729,6 @@ int fireSensorFL = 2;
 int fireSensorL = 3;
 int fireSensorB = 4;
 int fireSensorR = 5;
-
-int Sensors [4] = {fireSensorFR,fireSensorFL,firesensorL,fireSensorB,fireSensorR};
-int Temps [4];
-
 int fire = 0;
 
 
@@ -741,6 +738,7 @@ int fire = 0;
 
 //returns whether a fire was found
 bool searchForFire(){
+  int i =0;
       //getting the voltage reading from the temperature sensor
  int reading = analogRead(A0);
  
@@ -752,15 +750,14 @@ bool searchForFire(){
  //Serial.print(voltage); Serial.println(" volts");
  
  // now print out the temperature
- float Temps[i] = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset. CELCIUS
+ Temps[i] = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset. CELCIUS
                                                //to degrees ((voltage - 500mV) times 100)
- Serial.print("sensor" sensors[i]);
+ Serial.print("sensor" A0);
  Serial.print(Temps[i]);
  Serial.println(" degrees C");
-    }
 if (Temps[i] > 30) {
  return true;
- fire = Sensors[i];
+ fire = 0;
  fireHere();
     }
  else {
