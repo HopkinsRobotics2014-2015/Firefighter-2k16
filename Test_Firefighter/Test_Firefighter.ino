@@ -114,8 +114,8 @@ float takeRead(char r)
 
 void fullF()
 {
-  motors[CW].fullR();
-  motors[CCW].fullF();
+  analogWrite(motors[CW].pin, motors[CW].fullFs);
+  analogWrite(motors[CCW].pin, motors[CCW].fullRs);  
 }
 void fullS()
 {
@@ -124,21 +124,29 @@ void fullS()
 }
 void fullR()
 {
-  motors[CW].fullF();
-  motors[CCW].fullR();
+  motors[CCW].fullF();
+  motors[CW].fullR();
 }
 void fullCCW()
 {
-  motors[CW].fullF();
   motors[CCW].fullF();
+  motors[CW].fullF();
 }
 void fullCW()
 {
-  motors[CW].fullR();
   motors[CCW].fullR();
+  motors[CW].fullR();
 }
 
 void setup() {
+
+
+
+
+
+
+
+
 //This accounts for the 30 centimeters that the robot is. I am accounting for it as +40 cm
   checkpoints[0] = new checkpoint (23, 47);
   checkpoints[1] = new checkpoint (23, 114);
@@ -179,6 +187,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
 
+
   declareMotor(0);
   declareMotor(1);
   currentOrientation.x = 99;
@@ -187,7 +196,6 @@ void setup() {
 
   determineOrientation();
  
-    
 
   Align();
   Move (0, 100, -PI/2.0);

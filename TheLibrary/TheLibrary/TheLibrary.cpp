@@ -65,17 +65,17 @@ motor::motor()
 void motor::fullF()
   {
     pinMode(pin, OUTPUT);
-    analogWrite((*this).pin,(*this).fullFs);
+    analogWrite(pin, fullFs);
   }
 void motor:: fullS()
   {
     pinMode(pin, OUTPUT);
-    analogWrite((*this).pin,(*this).fullSs);
+    analogWrite(pin, fullSs);
   }
 void motor:: fullR()
   {
     pinMode(pin, OUTPUT);
-    analogWrite(this->pin,this  -> fullRs);
+    analogWrite(pin , fullRs);
   }
 motor motor:: get(){
   motor *r = new motor();
