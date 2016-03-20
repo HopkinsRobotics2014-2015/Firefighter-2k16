@@ -13,8 +13,8 @@ int North = 1;
 int South = 2;
 int East = 3;
 int West = 4;
-int CW = 0;
-int CCW = 1;
+int CW = 1;
+int CCW = 0;
 int flamePin = 0;
 
 pvec3f currentOrientation;
@@ -39,9 +39,9 @@ void declareMotor(int i)
   {
     case (0):
     motors[0] = *r;
-    motors[0].pin = 1;
-    motors[0].fullFs = 225;
-    motors[0].fullSs = 189;
+    motors[0].pin = 11;
+    motors[0].fullFs = 240;
+    motors[0].fullSs = 191;
     motors[0].fullRs = 157;
     CW = 0;
     break;
@@ -50,8 +50,8 @@ void declareMotor(int i)
     motors[1] = *r;
     motors[1].fullFs = 240;
     motors[1].fullSs = 191;
-    motors[1].fullRs = 130;
-    motors[1].pin = 2;
+    motors[1].fullRs = 145;
+    motors[1].pin = 12;
     CCW = 1;
     break;
     default:
@@ -66,11 +66,35 @@ void declareUltrasonics()
   {
     ultrasonic *r = new ultrasonic();
     ultrasonics[i] = *r;
-    ultrasonics[i].pin = i+1;
   }
+  //Front
+  ultrasonic[0].pinE = 14;
+  ultrasonic[0].pinT = 15;
+  //Right F
+  ultrasonic[1].pinE = 7;
+  ultrasonic[1].pinT = 6;
+  //Right B
+  ultrasonic[2].pinE = 4;
+  ultrasonic[2].pinT = 3;
+  //Left F
+  ultrasonic[3].pinE = 18;
+  ultrasonic[3].pinT = 19;
+  //Left B
+  ultrasonic[4].pinE = 16;
+  ultrasonic[4].pinT = 17;
+  //Back
+  ultrasonic[5].pinE = 20;
+  ultrasonic[5].pinT = 21;
 }
 
-
+float takeRead(char r)
+{
+  switch (r)
+  {
+    case (N):
+    
+  }
+}
 
 void fullF()
 {
@@ -855,7 +879,7 @@ pvec3f turnAround()
     else
     {
       drive(-1.5);
-      turn(-(apple));
+      rotate(-(apple));
     }
   }
 }
