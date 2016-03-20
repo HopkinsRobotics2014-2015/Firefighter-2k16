@@ -577,14 +577,17 @@ void Move(float x,float y,float z)
 float rotate(float angle)
 {
   //Here is a proposition
-  takeReads();
-  float firstReads[ultrasonics.length] = reads
-   float currentReads[ultrasonics.length] = reads;
-   float lastRead[ultrasonics.length] = reads;
+   takeReads();
+   float angleTurned;
+   float firstReads[6] = reads;
+   float currentReads[6] = reads;
+   float lastRead[6] = reads;
    float startAngle = currentOrientation.angle;
+   if ( angle == PI/2){
    fullCW();
    float lowestRead= 100000;
    int smallDirection;
+   angleTurned = PI/2;
    for(int i = 0; i < 6; i++)
    {
      if(reads[i] < lowestRead)
@@ -595,9 +598,39 @@ float rotate(float angle)
    }
   while(currentRead[smallDirection] > lastRead[smallDirection])
   {
-    ultrasonic[smallDirection].takeRead();
-        
+    ultrasonics[smallDirection].takeRead(); 
   }
+  fullS();
+  fullCW();
+  while(lastRead[smallDirection] > currentRead[smallDirecton])
+  {
+    ultrasonics[smallDirection].takeRead();
+  }
+   }
+   if ( angle == -PI/2){
+   fullCCW();
+   float lowestRead= 100000;
+   int smallDirection;
+   angleTurned = -PI/2.0;
+   for(int i = 0; i < 6; i++)
+   {
+     if(reads[i] < lowestRead)
+     {
+       lowestRead = reads[i];
+       smallDirection = i;
+     }
+   }
+  while(currentRead[smallDirection] > lastRead[smallDirection])
+  {
+    ultrasonics[smallDirection].takeRead(); 
+  }
+  fullS();
+  fullCCW();
+  while(lastRead[smallDirection] > currentRead[smallDirecton])
+  {
+    ultrasonics[smallDirection].takeRead();
+  }
+   }
   return angleTurned;
   //This is the second hardest program to write here
   //We need to find rotation. Take measurements on all sides
@@ -630,93 +663,93 @@ void Align () {
   float East = takeRead('E');
   float South = takeRead('S');
   float West = takeRead('W');
-  float first = min (U1, U2);
-  float second = min (first, U3);
-  float Min = min (second, U4);
+  float first = min (North, East);
+  float second = min (first, South);
+  float Min = min (second, West);
   if (Min == North) {
-    float one = CheckDistance (U1);
+    float one = takeRead('N');
     pinMode(leftMotor, OUTPUT);
     analogWrite(leftMotor, 119);
     delay(1);
-    float two = CheckDistance (U1);
+    float two = takeRead('N');
     while (two <= one) {
-      float two = CheckDistance (U1);
+      float two = takeRead('N');
       noBack = false;
     }
     analogWrite(leftMotor, 191);
     if (noBack == false) {
-      float one = CheckDistance (U1);
+      float one = takeRead('N');
       analogWrite(leftMotor, 240);
       delay(1);
-      float two = CheckDistance (U1);
+      float two = takeRead('N');
       while (two <= one) {
-      float two = CheckDistance (U1);
+      float two = takeRead('N');
     }
     analogWrite(leftMotor,191);
     }
   }
   if (Min == East) {
-    float one = CheckDistance (U2);
+    float one = takeRead('E');
     pinMode(leftMotor, OUTPUT);
     analogWrite(leftMotor, 119);
     delay(1);
-    float two = CheckDistance (U2);
+    float two = takeRead('E');
     while (two <= one) {
-      float two = CheckDistance (U2);
+      float two = takeRead('E');
       noBack = false;
     }
     analogWrite(leftMotor, 191);
     if (noBack == false) {
-      float one = CheckDistance (U2);
+      float one = takeRead('E');
       analogWrite(leftMotor, 240);
       delay(1);
-      float two = CheckDistance (U2);
+      float two = takeRead('E');
       while (two <= one) {
-      float two = CheckDistance (U2);
+      float two = takeRead('E');
     }
     analogWrite(leftMotor,191);
     }
   }
   if (Min == South) {
-    float one = CheckDistance (U3);
+    float one = takeRead('S');
     pinMode(leftMotor, OUTPUT);
     analogWrite(leftMotor, 119);
     delay(1);
-    float two = CheckDistance (U3);
+    float two = takeRead('S');
     while (two <= one) {
-      float two = CheckDistance (U3);
+      float two = takeRead('S');
       noBack = false;
     }
     analogWrite(leftMotor, 191);
     if (noBack == false) {
-      float one = CheckDistance (U3);
+      float one = takeRead('S');
       analogWrite(leftMotor, 240);
       delay(1);
-      float two = CheckDistance (U3);
+      float two = takeRead('S');;
       while (two <= one) {
-      float two = CheckDistance (U3);
+      float two = takeRead('S');
     }
     analogWrite(leftMotor,191);
     }
   }
   if (Min == West) {
-    float one = CheckDistance (U4);
+    float one = takeRead('W');
     pinMode(leftMotor, OUTPUT);
     analogWrite(leftMotor, 119);
     delay(1);
-    float two = CheckDistance (U4);
+    float two = takeRead('W');
     while (two <= one) {
-      float two = CheckDistance (U4);
+      float two = takeRead('W');
       noBack = false;
     }
     analogWrite(leftMotor, 191);
     if (noBack == false) {
-      float one = CheckDistance (U4);
+      float one = takeRead('W');
       analogWrite(leftMotor, 240);
       delay(1);
-      float two = CheckDistance (U4);
+      float two = takeRead('W');
       while (two <= one) {
-      float two = CheckDistance (U4);
+      float two =takeRead('W');
     }
     analogWrite(leftMotor,191);
     }
@@ -752,7 +785,7 @@ bool searchForFire(){
  // now print out the temperature
  Temps[i] = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset. CELCIUS
                                                //to degrees ((voltage - 500mV) times 100)
- Serial.print("sensor" A0);
+ Serial.print("sensor" "A0");
  Serial.print(Temps[i]);
  Serial.println(" degrees C");
 if (Temps[i] > 30) {
@@ -788,7 +821,7 @@ bool flameSensorRead(int i) {
 
   
  return true;
- fire = Sensors[i];
+ fire = A0;
  fireHere();
     }
  else {
