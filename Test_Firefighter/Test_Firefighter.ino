@@ -286,6 +286,7 @@ class Line
     }
 };
 */
+
 void visualize() {
   for (checkpoint cp : checkpoints) {
     ellipse(map(cp.x, 0, 244, 40, 760), map(cp.y, 0, 244, 40, 560), 20, 20);
@@ -294,6 +295,7 @@ void visualize() {
     }
   }
 }
+
 //checkpoint 1 hard way example
 //THis is assuming i have the checkpoints be values and not variables
 //checkpoints.get(1).neighbors.add(checkpoint.get(2));
@@ -549,26 +551,24 @@ void draw(){
   visualize();
 }
 
-void keyPressed(){
-  if (1 <= key - '0' && key - '0' <= 9) setNeighbors(key - '0' + 2);
-}
+
 
 // Checkpoints Start
 int distanceToAlign = 25;
 
 void Move(float x,float y,float z)
 {
-  pvec3f pie = new pvec3f();
-  float pie.x = x;
-  float pie.y = y;
-  float pie.angle = z;
-  float rotation = atan(pie.y / pie.x);
+  pvec3f *pie = new pvec3f();
+  pie->setX(x);
+  pie->setY(y);
+  pie->setAngle(z);
+  float rotation = atan(pie->getY() / pie->getX());
   rotation -= currentOrientation.angle;
   rotate(rotation);
-  float distance = pie.x * pie.x + pie.y * pie.y;
+  float distance = pie->getX() * pie->getX() + pie->getY()* pie->getY();
   distance = sqrt(distance);
   drive(distance);
-  rotation = -(currentorientation.angle - pie.angle);
+  rotation = -(currentOrientation.angle - pie->angle);
   rotate(rotation);
   //callibrate(pie);
   return;
@@ -579,9 +579,12 @@ float rotate(float angle)
   //Here is a proposition
    takeReads();
    float angleTurned;
-   float firstReads[6] = reads;
-   float currentReads[6] = reads;
-   float lastRead[6] = reads;
+   float firstReads[6];
+   *firstReads = *reads;
+   float currentReads[6];
+   *currentReads = *reads;
+   float lastRead[6];
+   *lastRead = *reads;
    float startAngle = currentOrientation.angle;
    if ( angle == PI/2){
    fullCW();
@@ -596,13 +599,13 @@ float rotate(float angle)
        smallDirection = i;
      }
    }
-  while(currentRead[smallDirection] > lastRead[smallDirection])
+  while(currentReads[smallDirection] > lastRead[smallDirection])
   {
     ultrasonics[smallDirection].takeRead(); 
   }
   fullS();
   fullCW();
-  while(lastRead[smallDirection] > currentRead[smallDirecton])
+  while(lastRead[smallDirection] > currentReads[smallDirection])
   {
     ultrasonics[smallDirection].takeRead();
   }
@@ -620,13 +623,13 @@ float rotate(float angle)
        smallDirection = i;
      }
    }
-  while(currentRead[smallDirection] > lastRead[smallDirection])
+  while(currentReads[smallDirection] > lastRead[smallDirection])
   {
     ultrasonics[smallDirection].takeRead(); 
   }
   fullS();
   fullCCW();
-  while(lastRead[smallDirection] > currentRead[smallDirecton])
+  while(lastRead[smallDirection] > currentReads[smallDirection])
   {
     ultrasonics[smallDirection].takeRead();
   }
