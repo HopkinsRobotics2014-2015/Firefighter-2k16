@@ -170,7 +170,7 @@ void setup() {
   determineOrientation();
  
     
-  go(1,2);
+
   Align();
   Move (0, 100, -90);
   Move (0, 74, -90);
