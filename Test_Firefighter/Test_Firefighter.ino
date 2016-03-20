@@ -89,10 +89,25 @@ void declareUltrasonics()
 
 float takeRead(char r)
 {
-  switch (r)
-  {
-    case ('N'):
-    
+    if( r = 'N'){
+    float pie = ultrasonics[North].takeRead();
+    return pie;
+    }
+    if(r = 'S'){
+    float noVegiePlease = ultrasonics[South].takeRead();
+    return noVegiePlease = ultrasonics[South].takeRead();
+    }
+    if(r ='E'){
+    float chives = ultrasonics[East].takeRead();
+    chives += ultrasonics[2].takeRead();
+    chives = .5*chives;
+    return chives;
+    }
+    if(r = 'W'){
+    float radishes = ultrasonics[West].takeRead();
+    radishes += ultrasonics[4].takeRead();
+    radishes = radishes/2.0;
+    return radishes;
   }
 }
 
@@ -154,7 +169,6 @@ void setup() {
   determineOrientation();
  
     
-  go(1,2);
   Align();
   Move (0, 100, -90);
   Move (0, 74, -90);
@@ -201,7 +215,7 @@ void determineOrientation()
   currentOrientation.x = 23;
   currentOrientation.y = 42;
  }
- setNeighbors(oritentation); 
+ setNeighbors(orientation); 
 }
 
 
@@ -215,7 +229,7 @@ void determineOrientation()
 
 
 //Checkpoints Start
-checkpoint checkpoints[17];
+
 
 
 
