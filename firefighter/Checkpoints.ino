@@ -1,29 +1,8 @@
 
 checkpoint[] checkpoints;
 
-void setup () {
-  checkpoints = new checkpoint[17];
-  checkpoints[0] = new checkpoint (23, 42);
-  checkpoints[1] = new checkpoint (23, 114);
-  checkpoints[2] = new checkpoint (23, 166);
-  checkpoints[3] = new checkpoint (23, 221);
-  checkpoints[4] = new checkpoint (97, 23);
-  checkpoints[5] = new checkpoint (97, 114);
-  checkpoints[6] = new checkpoint (97, 175);
-  checkpoints[7] = new checkpoint (97, 221);
-  checkpoints[8] = new checkpoint (143, 73);
-  checkpoints[9] = new checkpoint (143, 114);
-  checkpoints[10] = new checkpoint (150, 175);//(150,17);
-  checkpoints[11] = new checkpoint (150, 221);//(150,22);
-  checkpoints[12] = new checkpoint (169, 23);//(169,23);
-  checkpoints[13] = new checkpoint (169, 73);//(169,73);
-  checkpoints[14] = new checkpoint (220, 23);//(220,23);
-  checkpoints[15] = new checkpoint (220, 114);//(220,11);
-  checkpoints[16] = new checkpoint (220, 222);//(220,22);
-  background(255);
-  size(800, 600);
-  visualize();
-}
+
+
 class checkpoint {
   float x;
   float y;
@@ -64,6 +43,7 @@ void visualize() {
 //Use the link function so that you only have to say link(1,2)
 
 //No Walls or Dog code
+/*
  link(1,2);
  link(2,6);
  link(3,4);

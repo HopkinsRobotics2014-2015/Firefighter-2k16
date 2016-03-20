@@ -1,34 +1,53 @@
 int distanceToAlign = 25;
 
-void Move(p3vecf pie)
+void Move(float x,float y,float z)
 {
+  pvec3f pie = new pvec3f();
+  float pie.x = x;
+  float pie.y = y;
+  float pie.angle = z;
   float rotation = atan(pie.y / pie.x);
-  rotation += currentOrientation.angle;
+  rotation -= currentOrientation.angle;
   rotate(rotation);
   float distance = pie.x * pie.x + pie.y * pie.y;
   distance = sqrt(distance);
-  if (distance >= distanceToAlign) {
-    for (distance >= distanceToAlign) {
-    drive(distanceToAlign);
-    distance -= distanceToAlign;
-    Align();
-    }
-  }
   drive(distance);
   rotation = -(currentorientation.angle - pie.angle);
   rotate(rotation);
+  //callibrate(pie);
+  return;
 }
 
-float CheckDistance (int Pin) {
-  digitalWrite(Pin, LOW);
-  delay(2);
-  digitalWrite(Pin, HIGH);
-  delay(5);
-  digitalWrite(Pin, LOW);
-  pinMode (Pin, INPUT);
-  digitalWrite(Pin, HIGH);
-  return pulseIn(Pin, HIGH) / 58.138; //in
+void rotate(float angle)
+{
+  //Here is a proposition
+  float[] firstReads = takeReads();
+  float[] currentReads = takeReads();
+  float startAngle = currentOrientation.angle;
+  fullCW();
+  //This is the second hardest program to write here
+  //We need to find rotation. Take measurements on all sides
+  //Begin rotation, and go either until the distance matches the distance we want or starts to decrease.
+  //If it starts to decrease we align to the maximum so as to figure out the angle we have allready turned.
+  //Wait there is an issue. What would happen if the distance was decreasing first.
 }
+/*
+void callibrate(pvec3f kiwi)
+{
+  //This is the hardest program to write here
+}
+*/
+
+//float CheckDistance (int Pin) {
+//  digitalWrite(Pin, LOW);
+//  delay(2);
+//  digitalWrite(Pin, HIGH);
+//  delay(5);
+//  digitalWrite(Pin, LOW);
+//  pinMode (Pin, INPUT);
+//  digitalWrite(Pin, HIGH);
+//  return pulseIn(Pin, HIGH) / 58.138; //in
+//}
 
 void Align () {
   //take ultrasonic readings for all ultrasonics
