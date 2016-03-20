@@ -16,7 +16,7 @@ int West = 4;
 int CW = 1;
 int CCW = 0;
 int flamePin = 0;
-
+float Temps[1];
 pvec3f currentOrientation;
 
 motor motors[2];
@@ -756,12 +756,12 @@ bool searchForFire(){
                                                //to degrees ((voltage - 500mV) times 100)
  Serial.print("sensor" sensors[i]);Serial.print(Temps[i]); Serial.println(" degrees C");
     }
-if (Temps[i] > VALUE HERE) {
+if (Temps[i] > 30) {
  return true;
  fire = Sensors[i];
  fireHere();
     }
- else() {
+ else {
   return false;
  }
 }
@@ -773,16 +773,26 @@ int fireHere() {
 
 //This is a function that navigation can call to check one of the flame sensors
 bool flameSensorRead(int i) {
-  int reading = analogRead(sensors[i]);
+  int reading = analogRead(A0);
    float voltage = reading * 5.0;
- voltage /= 1024.0; 
- float Temps[i] = (voltage - 0.5) * 100 ;
- if (Temps[i] > VALUE HERE) {
+ voltage /= 1024.0;
+ Temps[i] = (voltage - 0.5) * 100 ;
+
+
+
+
+ 
+ if (Temps[i] > 30) {
+
+
+
+
+  
  return true;
  fire = Sensors[i];
  fireHere();
     }
- else() {
+ else {
   return false;
  }
 }
@@ -797,19 +807,19 @@ float Speed;
 
 //Returns the distance moved
 float drive(float dist) {
-  int primary = S;
+  char primary = 'S';
   fullS();
   takeReads();
-  if(takeRead(N) < takeRead(S))
+  if(takeRead('N') < takeRead('S'))
   {
-    primary = N;
+    primary = 'N';
   }
-  float startRead = takeReads(primary);
+  float startRead = takeRead(primary);
   fullF();
   float current;
   float last;
   current = startRead;
-  doWhile(abs(current - startRead) < dist)
+  while(abs(current - startRead) < dist)
   {
    current = ultrasonics[primary].takeRead();
   }
@@ -818,11 +828,13 @@ float drive(float dist) {
   
   currentOrientation.y += sin(currentOrientation.angle)*dist;
   currentOrientation.x += cos(currentOrientation.angle)*dist;
+  return dist;
 }
 
 
 //Returns the number of radians turned
 //angle is in radians, since radians make arc length easier
+/*
 float Turn(float angle) {
   float Time;
   if (angle > 0) {
@@ -838,12 +850,12 @@ float Turn(float angle) {
   else {
     pinMode(motors[CW].pin,OUTPUT);
     char initialRead = mouse.mouse_Read();
-    analogWrite(motors[CW].pin, motors[CW].fullF);
-    doWhile( subtractY(mouse.mouse_Read() , initialRead)< angle/mouse.radius)
+    analogWrite(motors[CW].pin, motors[CW].fullFs);
+    while(subtractY(mouse.mouse_Read() , initialRead)< angle/mouse.radius)
     {
       delay(1);
     }
-    analogWrite(motors[CW].pin,motors[CW].fullS);
+    analogWrite(motors[CW].pin, motors[CW].fullSs);
   }
 }
 
@@ -851,7 +863,7 @@ void subtractY(char hex, char idk)
 {
   //We have to get the mouse hooked up to do readings
 }
-
+*/
 
 
 
@@ -928,7 +940,7 @@ void fireTime() {
       }
     }
     //HERE IS WHERE WE ROTATE THE ROBOT TO THE FLAME. NEED TO FIGURE OUT IF WE ARE DOING THIS WITH TWO MICE, ULTRASONICS, OR PRE-DETERMINED ROTATION VALUES
-    Turn (-Sensor);
+    rotate(-Sensor);
   }
   sprayAndPray();
 }
