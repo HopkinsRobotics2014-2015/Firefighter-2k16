@@ -90,25 +90,10 @@ void declareUltrasonics()
 
 float takeRead(char r)
 {
-    if( r = 'N'){
-    float pie = ultrasonics[North].takeRead();
-    return pie;
-    }
-    if(r = 'S'){
-    float noVegiePlease = ultrasonics[South].takeRead();
-    return noVegiePlease = ultrasonics[South].takeRead();
-    }
-    if(r ='E'){
-    float chives = ultrasonics[East].takeRead();
-    chives += ultrasonics[2].takeRead();
-    chives = .5*chives;
-    return chives;
-    }
-    if(r = 'W'){
-    float radishes = ultrasonics[West].takeRead();
-    radishes += ultrasonics[4].takeRead();
-    radishes = radishes/2.0;
-    return radishes;
+  switch (r)
+  {
+    case ('N'):
+    
   }
 }
 
@@ -170,6 +155,7 @@ void setup() {
   determineOrientation();
  
     
+  go(1,2);
   Align();
   Move (0, 100, -90);
   Move (0, 74, -90);
@@ -216,7 +202,7 @@ void determineOrientation()
   currentOrientation.x = 23;
   currentOrientation.y = 42;
  }
- setNeighbors(orientation); 
+ setNeighbors(oritentation); 
 }
 
 
@@ -230,7 +216,7 @@ void determineOrientation()
 
 
 //Checkpoints Start
-
+checkpoint checkpoints[17];
 
 
 
@@ -740,9 +726,8 @@ int fire = 0;
 
 //returns whether a fire was found
 bool searchForFire(){
-    for (int i = 0; i < 5; i++) {
       //getting the voltage reading from the temperature sensor
- int reading = analogRead(sensors[i]);
+ int reading = analogRead(A0);
  
  // converting that reading to voltage, for 3.3v arduino use 3.3
  float voltage = reading * 5.0;
@@ -754,7 +739,9 @@ bool searchForFire(){
  // now print out the temperature
  float Temps[i] = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset. CELCIUS
                                                //to degrees ((voltage - 500mV) times 100)
- Serial.print("sensor" sensors[i]);Serial.print(Temps[i]); Serial.println(" degrees C");
+ Serial.print("sensor" sensors[i]);
+ Serial.print(Temps[i]);
+ Serial.println(" degrees C");
     }
 if (Temps[i] > 30) {
  return true;
