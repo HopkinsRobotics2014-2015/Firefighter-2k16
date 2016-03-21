@@ -9,10 +9,12 @@
 
 
 // put your setup code here, to run once:
-int North = 1;
-int South = 2;
-int East = 3;
-int West = 4;
+int North = 0;
+int South = 5;
+int East = 1;
+int West = 3;
+int LeftBack = 4;
+int RightBack = 2;
 int CW = 1;
 int CCW = 0;
 int flamePin = 0;
@@ -91,7 +93,7 @@ void declareUltrasonics()
 float takeRead(char r)
 {
  if( r = 'N'){
-    float pie = ultrasonics[North].takeRead();
+    ultrasonics[North].takeRead();
     return pie;
     }
     if(r = 'S'){
@@ -100,13 +102,13 @@ float takeRead(char r)
     }
     if(r ='E'){
     float chives = ultrasonics[East].takeRead();
-    chives += ultrasonics[2].takeRead();
+    chives += ultrasonics[RightBack].takeRead();
     chives = .5*chives;
     return chives;
     }
     if(r = 'W'){
     float radishes = ultrasonics[West].takeRead();
-    radishes += ultrasonics[4].takeRead();
+    radishes += ultrasonics[LeftBack].takeRead();
     radishes = radishes/2.0;
     return radishes;
     }
@@ -195,9 +197,30 @@ void setup() {
   currentOrientation.angle = 0;
 
   determineOrientation();
- 
 
-  Align();
+  takeReads();
+  Serial.println(ultrasonics[West].myRead());
+ 
+  //runTheMaze();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void runTheMaze()
+{
   Move (0, 100, -PI/2.0);
   Move (0, 74, -PI/2.0);
   Move (0, 72, 0);
@@ -225,8 +248,9 @@ void setup() {
 
 
 
-
 void loop() {
+  takeReads();
+  Serial.println(ultrasonics[West].myRead());
 
 }
 
@@ -697,6 +721,64 @@ void callibrate(pvec3f kiwi)
 
 void Align () {
   //take ultrasonic readings for all ultrasonics
+  takeReads();
+  if(ultrasonics[West].myRead < ultrasonics[East].myRead)
+  {
+    if(ultrsonics[West].myRead < ultrasonics[LeftBack].myRead)
+    {
+      fullCW();
+      while(ultrsonics[West].myRead < ultrasonics[LeftBack].myRead)
+      {
+        fullS();
+        takeReads();
+        fullCW();
+        delay(1);
+      }
+      fullS();
+      
+    }
+    else
+    {
+      fullCCW();
+      while(ultrsonics[West].myRead > ultrasonics[LeftBack].myRead)
+      {
+        fullS();
+        takeReads();
+        delay(1);
+        fullCCW();
+      }
+      fullS();
+    }
+  }
+  else
+  {
+     if(ultrsonics[East].myRead < ultrasonics[RightBack].myRead)
+     {
+     fullCW();
+     while(ultrsonics[East].myRead < ultrasonics[RightBack].myRead)
+     {
+       fullS();
+       takeReads();
+       fullCW();
+       delay(1);
+     }
+     fullS();
+      
+    }
+    else
+    {
+      fullCCW();
+      while(ultrsonics[East].myRead > ultrasonics[RightBack].myRead)
+      {
+        fullS();
+        takeReads();
+        delay(1);
+        fullCCW();
+      }
+      fullS();
+    }
+  }
+  /*
   bool noBack = true;
   float North = takeRead('N');
   float East = takeRead('E');
@@ -707,8 +789,7 @@ void Align () {
   float Min = min (second, West);
   if (Min == North) {
     float one = takeRead('N');
-    pinMode(leftMotor, OUTPUT);
-    analogWrite(leftMotor, 119);
+    fullCCW();
     delay(1);
     float two = takeRead('N');
     while (two <= one) {
@@ -793,6 +874,8 @@ void Align () {
     analogWrite(leftMotor,191);
     }
   }
+  */
+  takeReads();
 }
 
 //Firefighter Start

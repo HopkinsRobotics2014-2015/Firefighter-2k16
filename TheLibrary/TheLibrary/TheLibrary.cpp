@@ -118,12 +118,13 @@ ultrasonic::ultrasonic()
 }
 
 float ultrasonic::takeRead() {
+  pinMode(pinT, OUTPUT);
+  pinMode(pinE,INPUT);
   digitalWrite(this -> pinT, LOW);
-  delay(2);
+  delayMicroseconds(2);
   digitalWrite(this -> pinT, HIGH);
-  delay(5);
+  delayMicroseconds(10);
   digitalWrite(this -> pinT, LOW);
-  pinMode (this -> pinT, INPUT);
   digitalWrite(this-> pinT, HIGH);
   float theRead;
   theRead = pulseIn(this->pinE, HIGH) / 58.138;
