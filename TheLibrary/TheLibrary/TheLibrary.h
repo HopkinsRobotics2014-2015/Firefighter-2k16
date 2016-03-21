@@ -68,8 +68,8 @@ class ultrasonic
   public:
     int pinE;
     int pinT;
-    float myRead;
-    float takeRead();
+    long myRead;
+    long takeRead();
     ultrasonic();
     void operator = (ultrasonic v);
     ultrasonic get(void);
