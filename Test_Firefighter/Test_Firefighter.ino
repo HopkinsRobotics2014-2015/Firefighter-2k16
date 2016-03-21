@@ -93,7 +93,7 @@ void declareUltrasonics()
 float takeRead(char r)
 {
  if( r = 'N'){
-    ultrasonics[North].takeRead();
+    float pie = ultrasonics[North].takeRead();
     return pie;
     }
     if(r = 'S'){
@@ -198,8 +198,7 @@ void setup() {
 
   determineOrientation();
 
-  takeReads();
-  Serial.println(ultrasonics[West].myRead());
+
  
   //runTheMaze();
 
@@ -250,7 +249,25 @@ void runTheMaze()
 
 void loop() {
   takeReads();
-  Serial.println(ultrasonics[West].myRead());
+  Serial.println("Begin");
+  delay(1000);
+  Serial.print("NORTH  ");
+  Serial.println(ultrasonics[North].myRead);
+  delay(1000);
+  Serial.print("East   ");
+  Serial.println(ultrasonics[East].myRead);
+  delay(1000);
+  Serial.print("RightBack   ");
+  Serial.println(ultrasonics[RightBack].myRead);
+  delay(1000);
+  Serial.print("South    ");
+  Serial.println(ultrasonics[South].myRead);
+  delay(1000);
+  Serial.print("LeftBack    ");
+  Serial.println(ultrasonics[LeftBack].myRead);
+  delay(1000);
+  Serial.print("West   ");
+  Serial.println(ultrasonics[West].myRead);
 
 }
 
@@ -724,10 +741,10 @@ void Align () {
   takeReads();
   if(ultrasonics[West].myRead < ultrasonics[East].myRead)
   {
-    if(ultrsonics[West].myRead < ultrasonics[LeftBack].myRead)
+    if(ultrasonics[West].myRead < ultrasonics[LeftBack].myRead)
     {
       fullCW();
-      while(ultrsonics[West].myRead < ultrasonics[LeftBack].myRead)
+      while(ultrasonics[West].myRead < ultrasonics[LeftBack].myRead)
       {
         fullS();
         takeReads();
@@ -740,7 +757,7 @@ void Align () {
     else
     {
       fullCCW();
-      while(ultrsonics[West].myRead > ultrasonics[LeftBack].myRead)
+      while(ultrasonics[West].myRead > ultrasonics[LeftBack].myRead)
       {
         fullS();
         takeReads();
@@ -752,10 +769,10 @@ void Align () {
   }
   else
   {
-     if(ultrsonics[East].myRead < ultrasonics[RightBack].myRead)
+     if(ultrasonics[East].myRead < ultrasonics[RightBack].myRead)
      {
      fullCW();
-     while(ultrsonics[East].myRead < ultrasonics[RightBack].myRead)
+     while(ultrasonics[East].myRead < ultrasonics[RightBack].myRead)
      {
        fullS();
        takeReads();
@@ -768,7 +785,7 @@ void Align () {
     else
     {
       fullCCW();
-      while(ultrsonics[East].myRead > ultrasonics[RightBack].myRead)
+      while(ultrasonics[East].myRead > ultrasonics[RightBack].myRead)
       {
         fullS();
         takeReads();
