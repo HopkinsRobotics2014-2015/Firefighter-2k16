@@ -127,15 +127,15 @@ void fullR()
   motors[CCW].fullF();
   motors[CW].fullR();
 }
-void fullCCW()
-{
-  motors[CCW].fullF();
-  motors[CW].fullF();
-}
 void fullCW()
 {
-  motors[CCW].fullR();
+  motors[CW].fullF();
+  motors[CCW].fullF();
+}
+void fullCCW()
+{
   motors[CW].fullR();
+  motors[CCW].fullR();
 }
 
 void setup() {
