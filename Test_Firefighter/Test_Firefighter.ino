@@ -22,7 +22,7 @@ float Temps[1];
 pvec3f currentOrientation;
 
 motor motors[2];
-float reads[6];
+long reads[6];
 ultrasonic ultrasonics[6];
 checkpoint checkpoints[17];
 
@@ -68,31 +68,47 @@ void declareUltrasonics()
   {
     ultrasonic *r = new ultrasonic();
     ultrasonics[i] = *r;
+    pinMode(ultrasonics[i].pinT, OUTPUT);
+    pinMode(ultrasonics[i].pinE, INPUT);
   }
   //Front
   ultrasonics[0].pinE = 14;
   ultrasonics[0].pinT = 15;
+  pinMode(ultrasonics[0].pinT,OUTPUT);
+  pinMode(ultrasonics[0].pinE, INPUT);
   //Right F
   ultrasonics[1].pinE = 7;
   ultrasonics[1].pinT = 6;
+  pinMode(ultrasonics[1].pinT,OUTPUT);
+  pinMode(ultrasonics[1].pinT,INPUT);
   //Right B
   ultrasonics[2].pinE = 4;
   ultrasonics[2].pinT = 3;
+  pinMode(ultrasonics[2].pinE, INPUT);
+  pinMode(ultrasonics[2].pinT, OUTPUT);
   //Left F
   ultrasonics[3].pinE = 18;
   ultrasonics[3].pinT = 19;
+  pinMode(ultrasonics[3].pinE, INPUT);
+  pinMode(ultrasonics[3].pinT, OUTPUT);
   //Left B
   ultrasonics[4].pinE = 16;
   ultrasonics[4].pinT = 17;
+  pinMode(ultrasonics[4].pinE,INPUT);
+  pinMode(ultrasonics[4].pinT,OUTPUT);
   //Back
   ultrasonics[5].pinE = 20;
   ultrasonics[5].pinT = 21;
+  pinMode(ultrasonics[5].pinE,INPUT);
+  pinMode(ultrasonics[5].pinT,OUTPUT);
 }
 
 
 float takeRead(char r)
 {
  if( r = 'N'){
+    pinMode(ultrasonics[North].pinT,OUTPUT);
+    pinMode(ultrasonics[North].pinE,OUTPUT);
     float pie = ultrasonics[North].takeRead();
     return pie;
     }
@@ -148,7 +164,6 @@ void setup() {
 
 
 
-
 //This accounts for the 30 centimeters that the robot is. I am accounting for it as +40 cm
   checkpoints[0] = new checkpoint (23, 47);
   checkpoints[1] = new checkpoint (23, 114);
@@ -192,9 +207,10 @@ void setup() {
 
   declareMotor(0);
   declareMotor(1);
+  declareUltrasonics();
   currentOrientation.x = 99;
   currentOrientation.y = 23;
-  currentOrientation.angle = 0;
+  currentOrientation.angle = PI;
 
   determineOrientation();
 
@@ -202,6 +218,7 @@ void setup() {
  
   //runTheMaze();
 
+  delay(10000);
 }
 
 
@@ -224,7 +241,7 @@ void runTheMaze()
   Move (0, 74, -PI/2.0);
   Move (0, 72, 0);
 //firefight
-  rotate (180);
+  rotate (PI);
   Move (0, 74, PI/2.0);
   Move (0, 72, -PI/2.0);
   Move (0, 107, -PI/2.0);
@@ -248,11 +265,16 @@ void runTheMaze()
 
 
 void loop() {
+  delay(2000);
+  //Align();
+  drive(10);
+  rotate(PI/2);
+  /*
   takeReads();
   Serial.println("Begin");
   delay(1000);
   Serial.print("NORTH  ");
-  Serial.println(ultrasonics[North].myRead);
+  Serial.println(ultrasonics[North].takeRead());
   delay(1000);
   Serial.print("East   ");
   Serial.println(ultrasonics[East].myRead);
@@ -268,6 +290,7 @@ void loop() {
   delay(1000);
   Serial.print("West   ");
   Serial.println(ultrasonics[West].myRead);
+  */
 
 }
 
@@ -627,8 +650,8 @@ void Move(float x,float y,float z)
 {
   pvec3f *pie = new pvec3f();
   float rotation;
-  pie->setX(x);
-  pie->setY(y);
+  pie->setX(x-currentOrientation.x);
+  pie->setY(y-currentOrientation.y);
   pie->setAngle(z);
   if(pie->getX() != 0){
   rotation = atan(pie->getY() / pie->getX());
@@ -654,6 +677,7 @@ void Move(float x,float y,float z)
 float rotate(float angle)
 {
   //Here is a proposition
+   fullS();
    takeReads();
    float angleTurned;
    float firstReads[6];
@@ -711,6 +735,7 @@ float rotate(float angle)
     ultrasonics[smallDirection].takeRead();
   }
    }
+  currentOrientation.angle += angleTurned;
   return angleTurned;
   //This is the second hardest program to write here
   //We need to find rotation. Take measurements on all sides
@@ -1141,11 +1166,14 @@ void returnHome() {
 
 void takeReads()
 {
-  float theReads[6];
+  long theReads[6];
   for(int i = 0; i < 6; i++)
   {
+    pinMode(ultrasonics[i].pinT, OUTPUT);
+    pinMode(ultrasonics[i].pinE,INPUT);
     theReads[i] = ultrasonics[i].takeRead();
-    delay(50);
+    ultrasonics[i].myRead = theReads[i];
+    delay(25);
   }
   *reads = *theReads;
   return;
