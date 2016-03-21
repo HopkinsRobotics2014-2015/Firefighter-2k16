@@ -252,22 +252,22 @@ void loop() {
   Serial.println("Begin");
   delay(1000);
   Serial.print("NORTH  ");
-  Serial.println(ultrasonics[North].myRead);
+  Serial.println(ultrasonics[North].takeRead());
   delay(1000);
   Serial.print("East   ");
-  Serial.println(ultrasonics[East].myRead);
+  Serial.println(ultrasonics[East].takeRead());
   delay(1000);
   Serial.print("RightBack   ");
-  Serial.println(ultrasonics[RightBack].myRead);
+  Serial.println(ultrasonics[RightBack].takeRead());
   delay(1000);
   Serial.print("South    ");
-  Serial.println(ultrasonics[South].myRead);
+  Serial.println(ultrasonics[South].takeRead());
   delay(1000);
   Serial.print("LeftBack    ");
-  Serial.println(ultrasonics[LeftBack].myRead);
+  Serial.println(ultrasonics[LeftBack].takeRead());
   delay(1000);
   Serial.print("West   ");
-  Serial.println(ultrasonics[West].myRead);
+  Serial.println(ultrasonics[West].takeRead());
 
 }
 
@@ -1145,6 +1145,7 @@ void takeReads()
   for(int i = 0; i < 6; i++)
   {
     theReads[i] = ultrasonics[i].takeRead();
+    delay(50);
   }
   *reads = *theReads;
   return;
