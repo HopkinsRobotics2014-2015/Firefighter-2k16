@@ -1,4 +1,3 @@
-void setup() {
 #include <Servo.h>
 
 float threshold;
@@ -10,7 +9,18 @@ Servo Han;
 void setup()
 {
   Han.attach(10);  
+  lookForFLame();
 }
+void loop()
+{
+  
+}
+
+
+
+
+
+
 
 void lookForFLame()
 {
@@ -19,6 +29,7 @@ void lookForFLame()
   int lowestReading;
   delay(3000);
   lowestRead = 100000000;
+  
   for(int i = 40 ; i < 100 ; i+=10)
   {
     int p = (i-40)/10.0;
@@ -31,38 +42,53 @@ void lookForFLame()
       lowestReading = p;
     }
   }
+    
   if( lowestRead < threshold )
   {
     putItOut();
     return;
   }
+
+  
   if( lowestRead < light)
   {
-  delay(3000);
-  Han.write(65);
-  if((lowestReading*10 + 40) >65);
-  {
-  analogWrite(12, 221);
-  while(takeFireRead() > lowestReading)
-  {
-    delayMicroseconds(1);
+    moveOnFlame(lowestRead, lowestReading);
   }
-  analogWrite(12, 191);
-  }
-  if( (lowestReading*10 + 40) <=65)
-  {
-  analogWrite(11, 221);
-  while(takeFireRead() > lowestReading)
-  {
-    delayMicroseconds(1);
-  }
-  }
-  }
-  if(lowestRead > light)
-  {
+
+  if(lowestRead > light){
     return;
   }
 
+}
+
+
+
+void moveOnFlame(float lowestRead, int lowestReading)
+{    
+  delay(3000);
+  Han.write(65);
+  if((lowestReading*10 + 40) >65);{
+    analogWrite(12, 221);
+    wait(lowestRead);
+    analogWrite(12, 191);
+  }
+  if( (lowestReading*10 + 40) <=65){
+    analogWrite(11, 221);
+    wait(lowestRead);
+    analogWrite(11,191);
+  }
+  
+}
+  
+
+
+
+
+void wait(float lowestRead)
+{
+  while(takeFireRead() > lowestRead){
+    delayMicroseconds(1);
+  }
 }
 //Firefighter Start
 int firePin = A0;

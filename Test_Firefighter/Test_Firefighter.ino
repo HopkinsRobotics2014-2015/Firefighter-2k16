@@ -691,6 +691,7 @@ void Move(float x,float y,float z)
 float rotate(float angle)
 {
   //Here is a proposition
+  /*
    fullS();
    takeReads();
    float angleTurned;
@@ -751,12 +752,41 @@ float rotate(float angle)
    }
   currentOrientation.angle += angleTurned;
   return angleTurned;
-  //This is the second hardest program to write here
-  //We need to find rotation. Take measurements on all sides
-  //Begin rotation, and go either until the distance matches the distance we want or starts to decrease.
-  //If it starts to decrease we align to the maximum so as to figure out the angle we have allready turned.
-  //Wait there is an issue. What would happen if the distance was decreasing first.
+  */
+  fullS();
+  takeReads();
+
+  /*
+  if(angle == -PI/2){
+    int primary = minimizeReads();
+    fullCCW();
+    int old = primary;
+    int want = old - 1;
+    if( primary == 0){
+      want = 6;
+    }
+    travel(old, want);
+    
+  }
+  */
 }
+
+  void rightpivotback (int value)
+{
+  readultra(4);
+  while (readback>value)
+  {
+    readultra(4);
+    analogWrite(rightmotor,hsf);
+    analogWrite(leftmotor,hsf);
+  }
+  STOP();
+  alignleft();
+}
+
+  
+
+
 /*
 void callibrate(pvec3f kiwi)
 {
@@ -1036,12 +1066,13 @@ float drive(float dist) {
   float last;
   current = startRead;
   float apple = current - startRead;
+  Serial.println(apple);
   while(abs(apple) < dist)
   {
    float sum;
    for(int i = 0; i < 10; i++)
    {
-    sum+= ultrasonics[primary].takeRead();
+    sum+= takeRead(primary);
    }
    current =sum/10.0;
    delay(10);
