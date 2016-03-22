@@ -755,6 +755,5 @@ void takeReads()
     delay(25);
   }
   *reads = *theReads;
-  return;
 }
 
