@@ -358,11 +358,24 @@ void Move(float x,float y,float z)
   return;
 }
 
+const float timeScaleFactor = 1500;
+
 float rotate(float angle)
 {
 
   fullS();
   takeReads();
+  if(angle > 0) {
+	  motors[CCW].fullF();
+	  motors[CW].fullR();
+  }
+  else {
+	  motors[CCW].fullR();
+	  motors[CW].fullF();
+  }
+  delay(angle * timeScaleFactor);
+  fullS();
+  return angle;
 }
 
   void rightpivotback (int value)
