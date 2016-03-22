@@ -35,10 +35,18 @@ class motor
     int fullFs;
     int fullSs;
     int fullRs;
+    int halfFs;
+    int halfRs;
+    int quarterFs;
+    int quarterRs;
     motor();
     void fullF();
     void fullS();
     void fullR();
+    void halfF();
+    void halfR();
+    void quarterF();
+    void quarterR();
     void operator = (motor v);
     motor get();
 };

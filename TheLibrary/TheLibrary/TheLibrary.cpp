@@ -77,6 +77,26 @@ void motor:: fullR()
     pinMode(pin, OUTPUT);
     analogWrite(pin , fullRs);
   }
+void motor:: halfF()
+{
+  pinMode(pin,OUTPUT);
+  analogWrite(pin, halfFs);
+}
+void motor:: halfR()
+{
+  pinMode(pin,OUTPUT);
+  analogWrite(pin, halfRs);
+}
+void motor:: quarterF()
+{
+  pinMode(pin,OUTPUT);
+  analogWrite(pin, quarterFs);
+}
+void motor:: quarterR()
+{
+  pinMode(pin,OUTPUT);
+  analogWrite(pin, quarterRs);
+}
 motor motor:: get(){
   motor *r = new motor();
   (*r).pin = pin;
