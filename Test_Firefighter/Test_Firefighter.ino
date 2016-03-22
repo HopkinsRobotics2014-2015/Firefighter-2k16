@@ -168,9 +168,24 @@ void fullCCW()
 }
 
 void setup() {
-
-
-
+  Serial.begin(9600);
+  pinMode(frontecho, INPUT);
+  pinMode(fronttrig, OUTPUT);
+  pinMode(backecho, INPUT);
+  pinMode(backtrig, OUTPUT);
+  pinMode(leftfrontecho, INPUT);
+  pinMode(leftfronttrig, OUTPUT);
+  pinMode(leftbackecho, INPUT);
+  pinMode(leftbacktrig, OUTPUT);
+  pinMode(rightfrontecho, INPUT);
+  pinMode(rightfronttrig, OUTPUT);
+  pinMode(rightbackecho, INPUT);
+  pinMode(rightbacktrig, OUTPUT);
+  pinMode(firePin, INPUT);
+  pinMode(fanPin, OUTPUT);
+  pinMode(rightmotor, OUTPUT);
+  pinMode(leftmotor, INPUT);
+  Han.attach(10);
 
 
 
@@ -213,7 +228,7 @@ void setup() {
   //visualize();
   
   // put your setup code here, to run once:
-  Serial.begin(9600);
+ 
 
 
   declareMotor(0);
@@ -307,6 +322,56 @@ void loop() {
   */
 
 }
+
+void alignright()
+{
+    ultrasonics[East].takeRead();
+    delay(25);
+    ultrasonics[BackRight].takeRead();
+    delay(25);
+    while (ultrasonics[East].myRead >= ultrasonics[BackRight].myRead)
+      {
+        ultrasonics[East].takeRead();
+        delay(25);
+        ultrasonics[BackRight].TakeRead();
+        analogWrite(motor[CW].pin, motor[CW].halfF);
+      }
+      fullS();
+    while (ultrasonics[East].myRead <ultrasonics[BackRight].myRead)
+      {
+        ultrasonics[East].takeRead();
+        delay(25);
+        ultrasonics[BackRight].takeRead();
+        analogWrite(motor[CW].pin, motor[CW].halfR);
+      }
+      fullS();
+}
+
+void alignright()
+{
+    ultrasonics[West].takeRead();
+    delay(25);
+    ultrasonics[BackLeft].takeRead();
+    delay(25);
+    while (ultrasonics[West].myRead >= ultrasonics[BackLeft].myRead)
+      {
+        ultrasonics[West].takeRead();
+        delay(25);
+        ultrasonics[BackLeft].TakeRead();
+        analogWrite(motor[CCW].pin, motor[CCW].halfF);
+      }
+      fullS();
+    while (ultrasonics[West].myRead <ultrasonics[BackLeft].myRead)
+      {
+        ultrasonics[West].takeRead();
+        delay(25);
+        ultrasonics[BackLeft].takeRead();
+        analogWrite(motor[CCW].pin, motor[CCW].halfR);
+      }
+      fullS();
+}
+
+
 
 void determineOrientation()
 {
@@ -607,39 +672,6 @@ float drive(float dist) {
 }
 
 
-//Returns the number of radians turned
-//angle is in radians, since radians make arc length easier
-/*
-float Turn(float angle) {
-  float Time;
-  if (angle > 0) {
-    pinMode(motors[CCW].pin,,OUTPUT);
-    char initialRead = mouse.mouse_Read();
-    analogWrite(motors[CCW].pin,motors[CCW].fullF);
-    doWhile(subtract(mouse.mouse_Read(), initialRead) < angle/mouse.radius)
-    {
-      delay(1);
-    }
-    analogWrite(motors[CCW].pin,motors[CCW].fullS);
-  }
-  else {
-    pinMode(motors[CW].pin,OUTPUT);
-    char initialRead = mouse.mouse_Read();
-    analogWrite(motors[CW].pin, motors[CW].fullFs);
-    while(subtractY(mouse.mouse_Read() , initialRead)< angle/mouse.radius)
-    {
-      delay(1);
-    }
-    analogWrite(motors[CW].pin, motors[CW].fullSs);
-  }
-}
-
-void subtractY(char hex, char idk)
-{
-  //We have to get the mouse hooked up to do readings
-}
-*/
-
 
 
 //TODO: make sure other files get these definitions
@@ -652,15 +684,6 @@ void subtractY(char hex, char idk)
 //returns the distance traveled
 float WallFollow(int wallSide) {
 }
-
-//Navigation Start
-
-//We need pins for the motors
-
-//Handles the actual navigation, not including position checking
-
-
-
 
 
 pvec3f turnAround()
