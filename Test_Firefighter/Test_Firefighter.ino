@@ -268,6 +268,8 @@ void loop() {
   delay(2000);
   //Align();
   drive(10);
+  Serial.println(ultrasonics[0].takeRead());
+  
   rotate(PI/2);
   /*
   takeReads();
@@ -1010,14 +1012,25 @@ float drive(float dist) {
   {
     primary = 'N';
   }
+  Serial.println(primary);
   float startRead = takeRead(primary);
   fullF();
   float current;
   float last;
   current = startRead;
-  while(abs(current - startRead) < dist)
+  float apple = current - startRead;
+  while(abs(apple) < dist)
   {
-   current = ultrasonics[primary].takeRead();
+   float sum;
+   for(int i = 0; i < 10; i++)
+   {
+    sum+= ultrasonics[primary].takeRead();
+   }
+   current =sum/10.0;
+   delay(10);
+   Serial.println(abs(current-startRead));
+   Serial.println(primary);
+   apple = current - startRead;
   }
 
    fullS();
