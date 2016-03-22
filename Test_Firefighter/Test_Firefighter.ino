@@ -156,6 +156,26 @@ void fullR()
   motors[CCW].fullF();
   motors[CW].fullR();
 }
+void halfF()
+{
+  motors[CW].halfF();
+  motors[CCW].halfR();
+}
+void halfR()
+{
+  motors[CW].halfR();
+  motors[CCW].halfF();
+}
+void quarterF()
+{
+  motors[CW].halfF();
+  motors[CCW].halfR();
+}
+void quarterR()
+{
+  motors[CW].halfR();
+  motors[CCW].halfF();
+}
 void fullCW()
 {
   motors[CW].fullF();
@@ -166,8 +186,48 @@ void fullCCW()
   motors[CW].fullR();
   motors[CCW].fullR();
 }
+void halfCCW()
+{
+  motors[CW].halfR();
+  motors[CCW].halfR();
+}
+void halfCW()
+{
+  motors[CW].halfF();
+  motors[CCW].halfF();
+}
+void quarterCCW()
+{
+  motors[CW].quarterR();
+  motors[CCW].quarterR();
+}
+void quarterCW()
+{
+  motors[CW].quarterF();
+  motors[CCW].quarterF();
+}
 
 void setup() {
+
+  Serial.begin(9600);
+  pinMode(frontecho, INPUT);
+  pinMode(fronttrig, OUTPUT);
+  pinMode(backecho, INPUT);
+  pinMode(backtrig, OUTPUT);
+  pinMode(leftfrontecho, INPUT);
+  pinMode(leftfronttrig, OUTPUT);
+  pinMode(leftbackecho, INPUT);
+  pinMode(leftbacktrig, OUTPUT);
+  pinMode(rightfrontecho, INPUT);
+  pinMode(rightfronttrig, OUTPUT);
+  pinMode(rightbackecho, INPUT);
+  pinMode(rightbacktrig, OUTPUT);
+  pinMode(firePin, INPUT);
+  pinMode(fanPin, OUTPUT);
+  pinMode(rightmotor, OUTPUT);
+  pinMode(leftmotor, INPUT);
+  Han.attach(10);
+
 
 
 
@@ -235,7 +295,53 @@ void setup() {
   Serial.println(ultrasonics[North].myRead);
 }
 
+void alignright()
+{
+    ultrasonics[East].takeRead();
+    delay(25);
+    ultrasonics[BackRight].takeRead();
+    delay(25);
+    while (ultrasonics[East].myRead >= ultrasonics[BackRight].myRead)
+      {
+        ultrasonics[East].takeRead();
+        delay(25);
+        ultrasonics[BackRight].TakeRead();
+        analogWrite(motor[CW].pin, motor[CW].halfF);
+      }
+      fullS();
+    while (ultrasonics[East].myRead <ultrasonics[BackRight].myRead)
+      {
+        ultrasonics[East].takeRead();
+        delay(25);
+        ultrasonics[BackRight].takeRead();
+        analogWrite(motor[CW].pin, motor[CW].halfR);
+      }
+      fullS();
+}
 
+void alignright()
+{
+    ultrasonics[West].takeRead();
+    delay(25);
+    ultrasonics[BackLeft].takeRead();
+    delay(25);
+    while (ultrasonics[West].myRead >= ultrasonics[BackLeft].myRead)
+      {
+        ultrasonics[West].takeRead();
+        delay(25);
+        ultrasonics[BackLeft].TakeRead();
+        analogWrite(motor[CCW].pin, motor[CCW].halfF);
+      }
+      fullS();
+    while (ultrasonics[West].myRead <ultrasonics[BackLeft].myRead)
+      {
+        ultrasonics[West].takeRead();
+        delay(25);
+        ultrasonics[BackLeft].takeRead();
+        analogWrite(motor[CCW].pin, motor[CCW].halfR);
+      }
+      fullS();
+}
 
 
 
@@ -380,15 +486,15 @@ float rotate(float angle)
 
   void rightpivotback (int value)
 {
-  readultra(4);
-  while (readback>value)
+  ultrasonics[South].takeRead();
+  while (reads[South]>value)
   {
-    readultra(4);
-    analogWrite(rightmotor,hsf);
-    analogWrite(leftmotor,hsf);
+    ultrasonics[South].takeRead();
+    motors[CW].halfF();
+    motors[CCW].halfF();
   }
-  FullS();
-  alignleft();
+  fullS();
+  alignLeft();
 }
 void leftpivotback (int value)
 {
