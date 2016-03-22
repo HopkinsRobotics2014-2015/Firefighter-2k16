@@ -19,6 +19,10 @@ int CW = 1;
 int CCW = 0;
 int flamePin = 0;
 float Temps[1];
+float threshold;
+float light;
+
+Servo Han;
 pvec3f currentOrientation;
 
 motor motors[2];
@@ -40,31 +44,39 @@ void declareMotor(int i)
   switch (i)
   {
     case (0):
-    motors[0] = *r;
-    motors[0].pin = 11;
-    motors[0].fullFs = 243;
-    motors[0].fullSs = 191;
-    motors[0].fullRs = 140;
-    CW = 0;
-    break;
-    
+      motors[0] = *r;
+      motors[0].pin = 11;
+      motors[0].fullFs = 243;
+      motors[0].fullSs = 191;
+      motors[0].fullRs = 140;
+      motors[0].halfFs = 221;
+      motors[0].halfRs = 160;
+      motors[0].quarterRs = 178;
+      motors[0].quarterFs = 203;
+      CCW = 0;
+      break;
+
     case (1):
-    motors[1] = *r;
-    motors[1].fullFs = 243;
-    motors[1].fullSs = 191;
-    motors[1].fullRs = 140;
-    motors[1].pin = 12;
-    CCW = 1;
-    break;
+      motors[1] = *r;
+      motors[1].halfFs = 221;
+      motors[1].halfRs = 160;
+      motors[1].quarterRs = 178;
+      motors[1].quarterFs = 203;
+      motors[1].fullFs = 243;
+      motors[1].fullSs = 191;
+      motors[1].fullRs = 140;
+      motors[1].pin = 12;
+      CW = 1;
+      break;
     default:
-    break;
+      break;
   }
 }
 
 void declareUltrasonics()
 {
 
-  for(int i = 0; i < 6; i++)
+  for (int i = 0; i < 6; i++)
   {
     ultrasonic *r = new ultrasonic();
     ultrasonics[i] = *r;
@@ -74,13 +86,13 @@ void declareUltrasonics()
   //Front
   ultrasonics[0].pinE = 14;
   ultrasonics[0].pinT = 15;
-  pinMode(ultrasonics[0].pinT,OUTPUT);
+  pinMode(ultrasonics[0].pinT, OUTPUT);
   pinMode(ultrasonics[0].pinE, INPUT);
   //Right F
   ultrasonics[1].pinE = 7;
   ultrasonics[1].pinT = 6;
-  pinMode(ultrasonics[1].pinT,OUTPUT);
-  pinMode(ultrasonics[1].pinT,INPUT);
+  pinMode(ultrasonics[1].pinT, OUTPUT);
+  pinMode(ultrasonics[1].pinT, INPUT);
   //Right B
   ultrasonics[2].pinE = 4;
   ultrasonics[2].pinT = 3;
@@ -94,97 +106,97 @@ void declareUltrasonics()
   //Left B
   ultrasonics[4].pinE = 16;
   ultrasonics[4].pinT = 17;
-  pinMode(ultrasonics[4].pinE,INPUT);
-  pinMode(ultrasonics[4].pinT,OUTPUT);
+  pinMode(ultrasonics[4].pinE, INPUT);
+  pinMode(ultrasonics[4].pinT, OUTPUT);
   //Back
   ultrasonics[5].pinE = 20;
   ultrasonics[5].pinT = 21;
-  pinMode(ultrasonics[5].pinE,INPUT);
-  pinMode(ultrasonics[5].pinT,OUTPUT);
+  pinMode(ultrasonics[5].pinE, INPUT);
+  pinMode(ultrasonics[5].pinT, OUTPUT);
 }
 
 
 float takeRead(char r)
 {
- if( r = 'N'){
-    pinMode(ultrasonics[North].pinT,OUTPUT);
-    pinMode(ultrasonics[North].pinE,INPUT);
+  if ( r = 'N') {
+    pinMode(ultrasonics[North].pinT, OUTPUT);
+    pinMode(ultrasonics[North].pinE, INPUT);
     float pie = ultrasonics[North].takeRead();
     return pie;
-    }
-    if(r = 'S')
-    {
-    pinMode(ultrasonics[North].pinT,OUTPUT);
-    pinMode(ultrasonics[North].pinE,INPUT);
+  }
+  if (r = 'S')
+  {
+    pinMode(ultrasonics[North].pinT, OUTPUT);
+    pinMode(ultrasonics[North].pinE, INPUT);
     float noVegiePlease = ultrasonics[South].takeRead();
     return noVegiePlease = ultrasonics[South].takeRead();
-    }
-    if(r ='E'){
-    pinMode(ultrasonics[East].pinT,OUTPUT);
-    pinMode(ultrasonics[East].pinE,INPUT);
-        pinMode(ultrasonics[RightBack].pinT,OUTPUT);
-    pinMode(ultrasonics[RightBack].pinE,INPUT);
+  }
+  if (r = 'E') {
+    pinMode(ultrasonics[East].pinT, OUTPUT);
+    pinMode(ultrasonics[East].pinE, INPUT);
+    pinMode(ultrasonics[RightBack].pinT, OUTPUT);
+    pinMode(ultrasonics[RightBack].pinE, INPUT);
     float chives = ultrasonics[East].takeRead();
     chives += ultrasonics[RightBack].takeRead();
-    chives = .5*chives;
+    chives = .5 * chives;
     return chives;
-    }
-    if(r = 'W'){
-    pinMode(ultrasonics[West].pinT,OUTPUT);
-    pinMode(ultrasonics[West].pinE,INPUT);
-    pinMode(ultrasonics[LeftBack].pinT,OUTPUT);
-    pinMode(ultrasonics[LeftBack].pinE,INPUT);
+  }
+  if (r = 'W') {
+    pinMode(ultrasonics[West].pinT, OUTPUT);
+    pinMode(ultrasonics[West].pinE, INPUT);
+    pinMode(ultrasonics[LeftBack].pinT, OUTPUT);
+    pinMode(ultrasonics[LeftBack].pinE, INPUT);
     float radishes = ultrasonics[West].takeRead();
     radishes += ultrasonics[LeftBack].takeRead();
-    radishes = radishes/2.0;
+    radishes = radishes / 2.0;
     return radishes;
-    }
+  }
 }
 
-void fullF()
+void fullR()
 {
   analogWrite(motors[CW].pin, motors[CW].fullFs);
-  analogWrite(motors[CCW].pin, motors[CCW].fullRs);  
+  analogWrite(motors[CCW].pin, motors[CCW].fullRs);
 }
 void fullS()
 {
   motors[CW].fullS();
   motors[CCW].fullS();
 }
-void fullR()
+void fullF()
 {
-  motors[CCW].fullF();
-  motors[CW].fullR();
+  motors[CCW].fullR();
+  motors[CW].fullF();
 }
-void halfF()
+void halfR()
 {
   motors[CW].halfF();
   motors[CCW].halfR();
 }
-void halfR()
+void halfF()
 {
   motors[CW].halfR();
   motors[CCW].halfF();
 }
-void quarterF()
+void quarterR()
 {
   motors[CW].halfF();
   motors[CCW].halfR();
 }
-void quarterR()
+void quarterF()
 {
   motors[CW].halfR();
   motors[CCW].halfF();
 }
 void fullCW()
 {
-  motors[CW].fullF();
-  motors[CCW].fullF();
+  motors[CCW].fullR();
+  motors[CW].fullR();
 }
 void fullCCW()
 {
   motors[CW].fullR();
-  motors[CCW].fullR();
+  motors[CCW].fullF();
 }
 void halfCCW()
 {
@@ -210,22 +222,7 @@ void quarterCW()
 void setup() {
 
   Serial.begin(9600);
-  pinMode(frontecho, INPUT);
-  pinMode(fronttrig, OUTPUT);
-  pinMode(backecho, INPUT);
-  pinMode(backtrig, OUTPUT);
-  pinMode(leftfrontecho, INPUT);
-  pinMode(leftfronttrig, OUTPUT);
-  pinMode(leftbackecho, INPUT);
-  pinMode(leftbacktrig, OUTPUT);
-  pinMode(rightfrontecho, INPUT);
-  pinMode(rightfronttrig, OUTPUT);
-  pinMode(rightbackecho, INPUT);
-  pinMode(rightbacktrig, OUTPUT);
-  pinMode(firePin, INPUT);
-  pinMode(fanPin, OUTPUT);
-  pinMode(rightmotor, OUTPUT);
-  pinMode(leftmotor, INPUT);
+
   Han.attach(10);
 
 
@@ -235,7 +232,7 @@ void setup() {
 
 
 
-//This accounts for the 30 centimeters that the robot is. I am accounting for it as +40 cm
+  //This accounts for the 30 centimeters that the robot is. I am accounting for it as +40 cm
   checkpoints[0] = new checkpoint (23, 47);
   checkpoints[1] = new checkpoint (23, 114);
   checkpoints[2] = new checkpoint (32, 221);
@@ -243,35 +240,35 @@ void setup() {
   checkpoints[4] = new checkpoint (99, 114);
   checkpoints[5] = new checkpoint (99, 128);
   checkpoints[6] = new checkpoint (99, 221);
-  checkpoints[7] = new checkpoint (166,221);
-  checkpoints[8] = new checkpoint (173,23);
-  checkpoints[9] = new checkpoint (173,90);
-  checkpoints[10] = new checkpoint (221,23);
-  checkpoints[11] = new checkpoint (221,128);
-  checkpoints[12] = new checkpoint (221,195);
-  
-  
-/*
-  checkpoints[1] = new checkpoint (23, 114);
-  checkpoints[2] = new checkpoint (23, 166);
-  checkpoints[3] = new checkpoint (23, 221);
-    checkpoints[4] = new checkpoint (99, 23);
-  checkpoints[5] = new checkpoint (99, 114);
-//  checkpoints[6] = new checkpoint (99, 175);
-  checkpoints[6] = new checkpoint (99, 221);
-//  checkpoints[7] = new checkpoint (143, 73);
-//  checkpoints[8] = new checkpoint (143, 114);
-  checkpoints[7] = new checkpoint (150, 175);//(150,17);
-  checkpoints[10] = new checkpoint (150, 221);//(150,22);
-  checkpoints[11] = new checkpoint (173, 23);//(169,23);
-  checkpoints[12] = new checkpoint (173, 73);//(169,73);
-  checkpoints[13] = new checkpoint (220, 23);//(220,23);
-  checkpoints[14] = new checkpoint (220, 114);//(220,11);
-  checkpoints[15] = new checkpoint (220, 222);//(220,22);
-*/
+  checkpoints[7] = new checkpoint (166, 221);
+  checkpoints[8] = new checkpoint (173, 23);
+  checkpoints[9] = new checkpoint (173, 90);
+  checkpoints[10] = new checkpoint (221, 23);
+  checkpoints[11] = new checkpoint (221, 128);
+  checkpoints[12] = new checkpoint (221, 195);
+
+
+  /*
+    checkpoints[1] = new checkpoint (23, 114);
+    checkpoints[2] = new checkpoint (23, 166);
+    checkpoints[3] = new checkpoint (23, 221);
+      checkpoints[4] = new checkpoint (99, 23);
+    checkpoints[5] = new checkpoint (99, 114);
+    checkpoints[6] = new checkpoint (99, 175);
+    checkpoints[6] = new checkpoint (99, 221);
+    checkpoints[7] = new checkpoint (143, 73);
+    checkpoints[8] = new checkpoint (143, 114);
+    checkpoints[7] = new checkpoint (150, 175);//(150,17);
+    checkpoints[10] = new checkpoint (150, 221);//(150,22);
+    checkpoints[11] = new checkpoint (173, 23);//(169,23);
+    checkpoints[12] = new checkpoint (173, 73);//(169,73);
+    checkpoints[13] = new checkpoint (220, 23);//(220,23);
+    checkpoints[14] = new checkpoint (220, 114);//(220,11);
+    checkpoints[15] = new checkpoint (220, 222);//(220,22);
+  */
 
   //visualize();
-  
+
   // put your setup code here, to run once:
   Serial.begin(9600);
 
@@ -286,61 +283,86 @@ void setup() {
   determineOrientation();
 
 
- 
+
   //runTheMaze();
+
   Serial.println(ultrasonics[0].takeRead());
   Serial.println(ultrasonics[South].myRead);
   delay(10000);
-  drive(5);
+  drive(10);
+  alignRight();
+  halfF();
+  while (ultrasonics[RightBack].takeRead() < 25) {
+    delayMicroseconds(1);
+  }
+  fullS();
+  rwrt(8);
+  drive(10);
+  fullCW();
+  while (ultrasonics[South].takeRead() > 15) {
+    delayMicroseconds(1);
+  }
+  fullS();
+  drive(2);
+  alignLeft();
+  drive(8);
+  alignLeft();
+
+
   Serial.println(ultrasonics[North].myRead);
 }
 
-void alignright()
+
+
+
+
+
+void alignRight()
 {
+  ultrasonics[East].takeRead();
+  delay(25);
+  ultrasonics[RightBack].takeRead();
+  delay(25);
+  while (ultrasonics[East].myRead >= ultrasonics[RightBack].myRead)
+  {
     ultrasonics[East].takeRead();
     delay(25);
-    ultrasonics[BackRight].takeRead();
+    ultrasonics[RightBack].takeRead();
+    motors[CW].halfF();
+  }
+  fullS();
+  while (abs(ultrasonics[East].myRead - ultrasonics[RightBack].myRead) > 2)
+  {
+    ultrasonics[East].takeRead();
     delay(25);
-    while (ultrasonics[East].myRead >= ultrasonics[BackRight].myRead)
-      {
-        ultrasonics[East].takeRead();
-        delay(25);
-        ultrasonics[BackRight].TakeRead();
-        analogWrite(motor[CW].pin, motor[CW].halfF);
-      }
-      fullS();
-    while (ultrasonics[East].myRead <ultrasonics[BackRight].myRead)
-      {
-        ultrasonics[East].takeRead();
-        delay(25);
-        ultrasonics[BackRight].takeRead();
-        analogWrite(motor[CW].pin, motor[CW].halfR);
-      }
-      fullS();
+    ultrasonics[RightBack].takeRead();
+    motors[CCW].halfR();
+  }
+  fullS();
 }
 
-void alignright()
+void alignLeft()
 {
+  ultrasonics[West].takeRead();
+  delay(25);
+  ultrasonics[LeftBack].takeRead();
+  delay(25);
+  while (ultrasonics[West].myRead >= ultrasonics[LeftBack].myRead)
+  {
     ultrasonics[West].takeRead();
     delay(25);
-    ultrasonics[BackLeft].takeRead();
+    ultrasonics[LeftBack].takeRead();
+    motors[CCW].halfR();
+  }
+  fullS();
+  while (ultrasonics[West].myRead < ultrasonics[LeftBack].myRead)
+  {
+    ultrasonics[West].takeRead();
     delay(25);
-    while (ultrasonics[West].myRead >= ultrasonics[BackLeft].myRead)
-      {
-        ultrasonics[West].takeRead();
-        delay(25);
-        ultrasonics[BackLeft].TakeRead();
-        analogWrite(motor[CCW].pin, motor[CCW].halfF);
-      }
-      fullS();
-    while (ultrasonics[West].myRead <ultrasonics[BackLeft].myRead)
-      {
-        ultrasonics[West].takeRead();
-        delay(25);
-        ultrasonics[BackLeft].takeRead();
-        analogWrite(motor[CCW].pin, motor[CCW].halfR);
-      }
-      fullS();
+    ultrasonics[LeftBack].takeRead();
+    motors[CW].halfF();
+  }
+  fullS();
 }
 
 
@@ -357,26 +379,26 @@ void alignright()
 
 void runTheMaze()
 {
-  Move (0, 100, -PI/2.0);
-  Move (0, 74, -PI/2.0);
+  Move (0, 100, -PI / 2.0);
+  Move (0, 74, -PI / 2.0);
   Move (0, 72, 0);
-//firefight
+  //firefight
   rotate (PI);
-  Move (0, 74, PI/2.0);
-  Move (0, 72, -PI/2.0);
-  Move (0, 107, -PI/2.0);
+  Move (0, 74, PI / 2.0);
+  Move (0, 72, -PI / 2.0);
+  Move (0, 107, -PI / 2.0);
   Move (0, 74, 0);
-//firefight
+  //firefight
   rotate (180);
-  Move (0, 74, PI/2.0);
+  Move (0, 74, PI / 2.0);
   Move (0, 46, -90);
   Move (0, 53, 0);
-//firefight
+  //firefight
   Move (0, 70, 90);
   Move (0, 198, 90);
   Move (0, 51, 90);
   Move (0, 50, 0);
-//firefight
+  //firefight
   rotate (180);
   Move (0, 50, 90);
   Move (0, 72, 90);
@@ -388,7 +410,7 @@ void loop() {
   //delay(2000);
   //Align();
   //Serial.println(ultrasonics[0].takeRead());
-  
+
   /*
   takeReads();
   Serial.println("Begin");
@@ -411,23 +433,51 @@ void loop() {
   Serial.print("West   ");
   Serial.println(ultrasonics[West].myRead);
   */
+  //alignLeft();
+  //delay(5000);
+  //alignRight();
+  //delay(5000);
+
+
 
 }
 
+void rwrt(int value)
+{
+  ultrasonics[East].takeRead();
+  while (ultrasonics[East].myRead > value)
+  {
+    ultrasonics[East].takeRead();
+    motors[CCW].halfR();
+  }
+}
+
+
+void lwlt(int value)
+{
+  ultrasonics[West].takeRead();
+  while (ultrasonics[West].myRead > value)
+  {
+    ultrasonics[West].takeRead();
+    motors[CW].halfF();
+  }
+}
+
+
 void determineOrientation()
 {
- int orientation;
- takeReads();
- if((10-reads[South]) < 2 && -2 < (10- reads[South]) && (10-reads[East]) < 2 && (10-reads[East]) > -2)
- {
-  orientation = North;
-  //minimize(East);
-  Align();
-  currentOrientation.angle = 0;
-  currentOrientation.x = 23;
-  currentOrientation.y = 42;
- }
- //setNeighbors(orientation); 
+  int orientation;
+  takeReads();
+  if ((10 - reads[South]) < 2 && -2 < (10 - reads[South]) && (10 - reads[East]) < 2 && (10 - reads[East]) > -2)
+  {
+    orientation = North;
+    //minimize(East);
+    Align();
+    currentOrientation.angle = 0;
+    currentOrientation.x = 23;
+    currentOrientation.y = 42;
+  }
+  //setNeighbors(orientation);
 }
 
 
@@ -436,26 +486,26 @@ void determineOrientation()
 // Checkpoints Start
 int distanceToAlign = 25;
 
-void Move(float x,float y,float z)
+void Move(float x, float y, float z)
 {
   pvec3f *pie = new pvec3f();
   float rotation;
-  pie->setX(x-currentOrientation.x);
-  pie->setY(y-currentOrientation.y);
+  pie->setX(x - currentOrientation.x);
+  pie->setY(y - currentOrientation.y);
   pie->setAngle(z);
-  if(pie->getX() != 0){
-  rotation = atan(pie->getY() / pie->getX());
+  if (pie->getX() != 0) {
+    rotation = atan(pie->getY() / pie->getX());
   }
-  else if(pie->getY() > 0)
+  else if (pie->getY() > 0)
   {
-    rotation = PI/2.0;
+    rotation = PI / 2.0;
   }
-  else{
-    rotation = -PI/2.0;
+  else {
+    rotation = -PI / 2.0;
   }
   rotation -= currentOrientation.angle;
   rotate(rotation);
-  float distance = pie->getX() * pie->getX() + pie->getY()* pie->getY();
+  float distance = pie->getX() * pie->getX() + pie->getY() * pie->getY();
   distance = sqrt(distance);
   drive(distance);
   rotation = -(currentOrientation.angle - pie->angle);
@@ -471,23 +521,23 @@ float rotate(float angle)
 
   fullS();
   takeReads();
-  if(angle > 0) {
-	  motors[CCW].fullF();
-	  motors[CW].fullR();
+  if (angle > 0) {
+    motors[CCW].fullF();
+    motors[CW].fullR();
   }
   else {
-	  motors[CCW].fullR();
-	  motors[CW].fullF();
+    motors[CCW].fullR();
+    motors[CW].fullF();
   }
   delay(angle * timeScaleFactor);
   fullS();
   return angle;
 }
 
-  void rightpivotback (int value)
+void rightpivotback (int value)
 {
   ultrasonics[South].takeRead();
-  while (reads[South]>value)
+  while (reads[South] > value)
   {
     ultrasonics[South].takeRead();
     motors[CW].halfF();
@@ -499,14 +549,14 @@ float rotate(float angle)
 void leftpivotback (int value)
 {
   takeReads();
-  ultrasoinics[East].takeRead();
-  while (reads[South] > value){
-    ultrasonics[South].takeRead;
-    
+  ultrasonics[East].takeRead();
+  while (reads[South] > value) {
+    ultrasonics[South].takeRead();
+
   }
 }
 
-  
+
 
 
 
@@ -514,12 +564,12 @@ void leftpivotback (int value)
 void Align () {
   //take ultrasonic readings for all ultrasonics
   takeReads();
-  if(ultrasonics[West].myRead < ultrasonics[East].myRead)
+  if (ultrasonics[West].myRead < ultrasonics[East].myRead)
   {
-    if(ultrasonics[West].myRead < ultrasonics[LeftBack].myRead)
+    if (ultrasonics[West].myRead < ultrasonics[LeftBack].myRead)
     {
       fullCW();
-      while(ultrasonics[West].myRead < ultrasonics[LeftBack].myRead)
+      while (ultrasonics[West].myRead < ultrasonics[LeftBack].myRead)
       {
         fullS();
         takeReads();
@@ -527,12 +577,12 @@ void Align () {
         delay(1);
       }
       fullS();
-      
+
     }
     else
     {
       fullCCW();
-      while(ultrasonics[West].myRead > ultrasonics[LeftBack].myRead)
+      while (ultrasonics[West].myRead > ultrasonics[LeftBack].myRead)
       {
         fullS();
         takeReads();
@@ -544,23 +594,23 @@ void Align () {
   }
   else
   {
-     if(ultrasonics[East].myRead < ultrasonics[RightBack].myRead)
-     {
-     fullCW();
-     while(ultrasonics[East].myRead < ultrasonics[RightBack].myRead)
-     {
-       fullS();
-       takeReads();
-       fullCW();
-       delay(1);
-     }
-     fullS();
-      
+    if (ultrasonics[East].myRead < ultrasonics[RightBack].myRead)
+    {
+      fullCW();
+      while (ultrasonics[East].myRead < ultrasonics[RightBack].myRead)
+      {
+        fullS();
+        takeReads();
+        fullCW();
+        delay(1);
+      }
+      fullS();
+
     }
     else
     {
       fullCCW();
-      while(ultrasonics[East].myRead > ultrasonics[RightBack].myRead)
+      while (ultrasonics[East].myRead > ultrasonics[RightBack].myRead)
       {
         fullS();
         takeReads();
@@ -570,16 +620,13 @@ void Align () {
       fullS();
     }
   }
- 
+
   takeReads();
 }
 
 
 
-float threshold;
-float light;
 
-Servo Han;
 
 
 void lookForFLame()
@@ -589,33 +636,33 @@ void lookForFLame()
   int lowestReading;
   delay(3000);
   lowestRead = 100000000;
-  
-  for(int i = 40 ; i < 100 ; i+=10)
+
+  for (int i = 40 ; i < 100 ; i += 10)
   {
-    int p = (i-40)/10.0;
+    int p = (i - 40) / 10.0;
     Han.write(i);
     delay(3000);
     reads[p] = takeFireRead();
-    if(reads[p] < lowestRead)
+    if (reads[p] < lowestRead)
     {
       lowestRead = reads[p];
       lowestReading = p;
     }
   }
-    
-  if( lowestRead < threshold )
+
+  if ( lowestRead < threshold )
   {
     putItOut();
     return;
   }
 
-  
-  if( lowestRead < light)
+
+  if ( lowestRead < light)
   {
     moveOnFlame(lowestRead, lowestReading);
   }
 
-  if(lowestRead > light){
+  if (lowestRead > light) {
     return;
   }
 
@@ -624,29 +671,29 @@ void lookForFLame()
 
 
 void moveOnFlame(float lowestRead, int lowestReading)
-{    
+{
   delay(3000);
   Han.write(65);
-  if((lowestReading*10 + 40) >65);{
+  if ((lowestReading * 10 + 40) > 65); {
     analogWrite(12, 221);
     wait(lowestRead);
     analogWrite(12, 191);
   }
-  if( (lowestReading*10 + 40) <=65){
+  if ( (lowestReading * 10 + 40) <= 65) {
     analogWrite(11, 221);
     wait(lowestRead);
-    analogWrite(11,191);
+    analogWrite(11, 191);
   }
-  
+
 }
-  
+
 
 
 
 
 void wait(float lowestRead)
 {
-  while(takeFireRead() > lowestRead){
+  while (takeFireRead() > lowestRead) {
     delayMicroseconds(1);
   }
 }
@@ -665,7 +712,7 @@ void putItOut()
 //returns whether a fire was found
 bool fireFight()
 {
-  
+
   //Take reading
   delay(500);
 }
@@ -686,7 +733,7 @@ float drive(float dist) {
   char primary = 'N';
   fullS();
   takeReads();
-  if(ultrasonics[North].myRead < ultrasonics[South].myRead)
+  if (ultrasonics[North].myRead < ultrasonics[South].myRead)
   {
     primary = 'N';
   }
@@ -703,25 +750,25 @@ float drive(float dist) {
   current = startRead;
   float apple = current - startRead;
   Serial.println(apple);
-  while(abs(apple) < dist)
+  while (abs(apple) < dist)
   {
-   float sum;
-   for(int i = 0; i < 10; i++)
-   {
-    sum+= takeRead(primary);
-   }
-   current =sum/10.0;
-   delay(10);
-   Serial.println(current);
-   Serial.println(abs(current-startRead));
-   Serial.println(primary);
-   apple = current - startRead;
+    float sum;
+    for (int i = 0; i < 10; i++)
+    {
+      sum += takeRead(primary);
+    }
+    current = sum / 10.0;
+    delay(10);
+    Serial.println(current);
+    Serial.println(abs(current - startRead));
+    Serial.println(primary);
+    apple = current - startRead;
   }
 
-   fullS();
-  
-  currentOrientation.y += sin(currentOrientation.angle)*dist;
-  currentOrientation.x += cos(currentOrientation.angle)*dist;
+  fullS();
+
+  currentOrientation.y += sin(currentOrientation.angle) * dist;
+  currentOrientation.x += cos(currentOrientation.angle) * dist;
   return dist;
 }
 
@@ -789,13 +836,13 @@ pvec3f turnAround()
   {
     drive(-1.5);
     float kiwi = rotate(PI);
-    if(kiwi < PI)
+    if (kiwi < PI)
     {
-    rotate(-kiwi);
-    drive(-5);
-    float peach = rotate(PI);
-    drive(-5);
-    rotate(-apple);
+      rotate(-kiwi);
+      drive(-5);
+      float peach = rotate(PI);
+      drive(-5);
+      rotate(-apple);
     }
     else
     {
@@ -807,7 +854,7 @@ pvec3f turnAround()
 
 pvec3f attempt(pvec3f moveToAttempt)
 {
-  float anAngle = atan(moveToAttempt.y/moveToAttempt.x);
+  float anAngle = atan(moveToAttempt.y / moveToAttempt.x);
 }
 
 //3d move
@@ -815,7 +862,11 @@ pvec3f attempt(pvec3f moveToAttempt)
 //Rabbot, i'm gonna leave how you want to call this function to you, but here is a function that asks for scan for fire and then figures out how much the robot needs to turn to
 //face the fire
 
-
+/*
+bool searchForFire()
+{
+  return true;
+}
 
 void fireTime() {
   // this intializes the sensors in terms of degrees.
@@ -838,9 +889,9 @@ void fireTime() {
   }
   sprayAndPray();
 }
-
+*/
 //This function has the robot slowly approach the flame while blowing the fan.
-
+/*
 void sprayAndPray() {
   while (flameSensorRead(0)) {
     //IM OFFLINE RN BUT FIND FAN COMMAND. RUN FAN AT MAX
@@ -850,7 +901,7 @@ void sprayAndPray() {
   analogWrite(flamePin, 191);
   returnHome();
 }
-
+*/
 //This will direct the robot back to the start after the flame has been put out
 void returnHome() {
 
@@ -865,10 +916,10 @@ void returnHome() {
 void takeReads()
 {
   long theReads[6];
-  for(int i = 0; i < 6; i++)
+  for (int i = 0; i < 6; i++)
   {
     pinMode(ultrasonics[i].pinT, OUTPUT);
-    pinMode(ultrasonics[i].pinE,INPUT);
+    pinMode(ultrasonics[i].pinE, INPUT);
     theReads[i] = ultrasonics[i].takeRead();
     ultrasonics[i].myRead = theReads[i];
     delay(25);
