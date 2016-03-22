@@ -108,21 +108,32 @@ float takeRead(char r)
 {
  if( r = 'N'){
     pinMode(ultrasonics[North].pinT,OUTPUT);
-    pinMode(ultrasonics[North].pinE,OUTPUT);
+    pinMode(ultrasonics[North].pinE,INPUT);
     float pie = ultrasonics[North].takeRead();
     return pie;
     }
-    if(r = 'S'){
+    if(r = 'S')
+    {
+    pinMode(ultrasonics[North].pinT,OUTPUT);
+    pinMode(ultrasonics[North].pinE,INPUT);
     float noVegiePlease = ultrasonics[South].takeRead();
     return noVegiePlease = ultrasonics[South].takeRead();
     }
     if(r ='E'){
+    pinMode(ultrasonics[East].pinT,OUTPUT);
+    pinMode(ultrasonics[East].pinE,INPUT);
+        pinMode(ultrasonics[RightBack].pinT,OUTPUT);
+    pinMode(ultrasonics[RightBack].pinE,INPUT);
     float chives = ultrasonics[East].takeRead();
     chives += ultrasonics[RightBack].takeRead();
     chives = .5*chives;
     return chives;
     }
     if(r = 'W'){
+    pinMode(ultrasonics[West].pinT,OUTPUT);
+    pinMode(ultrasonics[West].pinE,INPUT);
+    pinMode(ultrasonics[LeftBack].pinT,OUTPUT);
+    pinMode(ultrasonics[LeftBack].pinE,INPUT);
     float radishes = ultrasonics[West].takeRead();
     radishes += ultrasonics[LeftBack].takeRead();
     radishes = radishes/2.0;
@@ -217,8 +228,11 @@ void setup() {
 
  
   //runTheMaze();
-
+  Serial.println(ultrasonics[0].takeRead());
+  Serial.println(ultrasonics[South].myRead);
   delay(10000);
+  drive(5);
+  Serial.println(ultrasonics[North].myRead);
 }
 
 
@@ -265,12 +279,10 @@ void runTheMaze()
 
 
 void loop() {
-  delay(2000);
+  //delay(2000);
   //Align();
-  drive(10);
-  Serial.println(ultrasonics[0].takeRead());
+  //Serial.println(ultrasonics[0].takeRead());
   
-  rotate(PI/2);
   /*
   takeReads();
   Serial.println("Begin");
@@ -1005,15 +1017,20 @@ float Speed;
 
 //Returns the distance moved
 float drive(float dist) {
-  char primary = 'S';
+  char primary = 'N';
   fullS();
   takeReads();
-  if(takeRead('N') < takeRead('S'))
+  if(ultrasonics[North].myRead < ultrasonics[South].myRead)
   {
     primary = 'N';
   }
+  else
+  {
+    primary = 'S';
+  }
   Serial.println(primary);
   float startRead = takeRead(primary);
+  Serial.println(startRead);
   fullF();
   float current;
   float last;
@@ -1028,6 +1045,7 @@ float drive(float dist) {
    }
    current =sum/10.0;
    delay(10);
+   Serial.println(current);
    Serial.println(abs(current-startRead));
    Serial.println(primary);
    apple = current - startRead;
